@@ -478,6 +478,280 @@ export class ContenedorServiceProxy {
 }
 
 @Injectable()
+export class EstadoServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @return Success
+     */
+    getEstados(filter: string | null | undefined): Observable<ListResultDtoOfEstadoListDto> {
+        let url_ = this.baseUrl + "/api/services/app/Estado/GetEstados?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEstados(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEstados(<any>response_);
+                } catch (e) {
+                    return <Observable<ListResultDtoOfEstadoListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ListResultDtoOfEstadoListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetEstados(response: HttpResponseBase): Observable<ListResultDtoOfEstadoListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ListResultDtoOfEstadoListDto.fromJS(resultData200) : new ListResultDtoOfEstadoListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ListResultDtoOfEstadoListDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    crearEstado(input: CrearEstadoInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Estado/CrearEstado";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCrearEstado(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCrearEstado(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCrearEstado(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    deleteEstado(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Estado/DeleteEstado?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteEstado(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteEstado(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteEstado(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getEstadoForEdit(id: number | null | undefined): Observable<GetEstadoForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/Estado/GetEstadoForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEstadoForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEstadoForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetEstadoForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetEstadoForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetEstadoForEdit(response: HttpResponseBase): Observable<GetEstadoForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetEstadoForEditOutput.fromJS(resultData200) : new GetEstadoForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetEstadoForEditOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    editEstado(input: EditEstadoInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Estado/EditEstado";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processEditEstado(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processEditEstado(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processEditEstado(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class RoleServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -1963,6 +2237,280 @@ export class UserServiceProxy {
     }
 }
 
+@Injectable()
+export class ViajeServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param filter (optional) 
+     * @return Success
+     */
+    getViajes(filter: string | null | undefined): Observable<ListResultDtoOfViajeListDto> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/GetViajes?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetViajes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetViajes(<any>response_);
+                } catch (e) {
+                    return <Observable<ListResultDtoOfViajeListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ListResultDtoOfViajeListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetViajes(response: HttpResponseBase): Observable<ListResultDtoOfViajeListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ListResultDtoOfViajeListDto.fromJS(resultData200) : new ListResultDtoOfViajeListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ListResultDtoOfViajeListDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    crearViaje(input: CrearViajeInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/CrearViaje";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCrearViaje(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCrearViaje(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCrearViaje(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    deleteViaje(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/DeleteViaje?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteViaje(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteViaje(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteViaje(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getViajeForEdit(id: number | null | undefined): Observable<GetViajeForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/GetViajeForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetViajeForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetViajeForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetViajeForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetViajeForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetViajeForEdit(response: HttpResponseBase): Observable<GetViajeForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetViajeForEditOutput.fromJS(resultData200) : new GetViajeForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetViajeForEditOutput>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    editViaje(input: EditViajeInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/EditViaje";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processEditViaje(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processEditViaje(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processEditViaje(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
 export class IsTenantAvailableInput implements IIsTenantAvailableInput {
     tenancyName: string;
 
@@ -2257,6 +2805,8 @@ export class ContenedorListDto implements IContenedorListDto {
     nombre: string | undefined;
     fechaCreacion: moment.Moment | undefined;
     cantidadViajes: number | undefined;
+    estadoId: number | undefined;
+    estado: string | undefined;
     isDeleted: boolean | undefined;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -2280,6 +2830,8 @@ export class ContenedorListDto implements IContenedorListDto {
             this.nombre = data["nombre"];
             this.fechaCreacion = data["fechaCreacion"] ? moment(data["fechaCreacion"].toString()) : <any>undefined;
             this.cantidadViajes = data["cantidadViajes"];
+            this.estadoId = data["estadoId"];
+            this.estado = data["estado"];
             this.isDeleted = data["isDeleted"];
             this.deleterUserId = data["deleterUserId"];
             this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
@@ -2303,6 +2855,8 @@ export class ContenedorListDto implements IContenedorListDto {
         data["nombre"] = this.nombre;
         data["fechaCreacion"] = this.fechaCreacion ? this.fechaCreacion.toISOString() : <any>undefined;
         data["cantidadViajes"] = this.cantidadViajes;
+        data["estadoId"] = this.estadoId;
+        data["estado"] = this.estado;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -2326,6 +2880,8 @@ export interface IContenedorListDto {
     nombre: string | undefined;
     fechaCreacion: moment.Moment | undefined;
     cantidadViajes: number | undefined;
+    estadoId: number | undefined;
+    estado: string | undefined;
     isDeleted: boolean | undefined;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -2340,6 +2896,7 @@ export class CrearContenedorInput implements ICrearContenedorInput {
     nombre: string;
     fechaCreacion: moment.Moment;
     cantidadViajes: number | undefined;
+    estadoId: number;
 
     constructor(data?: ICrearContenedorInput) {
         if (data) {
@@ -2355,6 +2912,7 @@ export class CrearContenedorInput implements ICrearContenedorInput {
             this.nombre = data["nombre"];
             this.fechaCreacion = data["fechaCreacion"] ? moment(data["fechaCreacion"].toString()) : <any>undefined;
             this.cantidadViajes = data["cantidadViajes"];
+            this.estadoId = data["estadoId"];
         }
     }
 
@@ -2370,6 +2928,7 @@ export class CrearContenedorInput implements ICrearContenedorInput {
         data["nombre"] = this.nombre;
         data["fechaCreacion"] = this.fechaCreacion ? this.fechaCreacion.toISOString() : <any>undefined;
         data["cantidadViajes"] = this.cantidadViajes;
+        data["estadoId"] = this.estadoId;
         return data; 
     }
 
@@ -2385,6 +2944,7 @@ export interface ICrearContenedorInput {
     nombre: string;
     fechaCreacion: moment.Moment;
     cantidadViajes: number | undefined;
+    estadoId: number;
 }
 
 export class GetContenedorForEditOutput implements IGetContenedorForEditOutput {
@@ -2392,6 +2952,8 @@ export class GetContenedorForEditOutput implements IGetContenedorForEditOutput {
     nombre: string | undefined;
     fechaCreacion: moment.Moment | undefined;
     cantidadViajes: number | undefined;
+    estadoId: number | undefined;
+    estado: string | undefined;
 
     constructor(data?: IGetContenedorForEditOutput) {
         if (data) {
@@ -2408,6 +2970,8 @@ export class GetContenedorForEditOutput implements IGetContenedorForEditOutput {
             this.nombre = data["nombre"];
             this.fechaCreacion = data["fechaCreacion"] ? moment(data["fechaCreacion"].toString()) : <any>undefined;
             this.cantidadViajes = data["cantidadViajes"];
+            this.estadoId = data["estadoId"];
+            this.estado = data["estado"];
         }
     }
 
@@ -2424,6 +2988,8 @@ export class GetContenedorForEditOutput implements IGetContenedorForEditOutput {
         data["nombre"] = this.nombre;
         data["fechaCreacion"] = this.fechaCreacion ? this.fechaCreacion.toISOString() : <any>undefined;
         data["cantidadViajes"] = this.cantidadViajes;
+        data["estadoId"] = this.estadoId;
+        data["estado"] = this.estado;
         return data; 
     }
 
@@ -2440,6 +3006,8 @@ export interface IGetContenedorForEditOutput {
     nombre: string | undefined;
     fechaCreacion: moment.Moment | undefined;
     cantidadViajes: number | undefined;
+    estadoId: number | undefined;
+    estado: string | undefined;
 }
 
 export class EditContenedorInput implements IEditContenedorInput {
@@ -2447,6 +3015,7 @@ export class EditContenedorInput implements IEditContenedorInput {
     nombre: string;
     fechaCreacion: moment.Moment;
     cantidadViajes: number | undefined;
+    estadoId: number;
 
     constructor(data?: IEditContenedorInput) {
         if (data) {
@@ -2463,6 +3032,7 @@ export class EditContenedorInput implements IEditContenedorInput {
             this.nombre = data["nombre"];
             this.fechaCreacion = data["fechaCreacion"] ? moment(data["fechaCreacion"].toString()) : <any>undefined;
             this.cantidadViajes = data["cantidadViajes"];
+            this.estadoId = data["estadoId"];
         }
     }
 
@@ -2479,6 +3049,7 @@ export class EditContenedorInput implements IEditContenedorInput {
         data["nombre"] = this.nombre;
         data["fechaCreacion"] = this.fechaCreacion ? this.fechaCreacion.toISOString() : <any>undefined;
         data["cantidadViajes"] = this.cantidadViajes;
+        data["estadoId"] = this.estadoId;
         return data; 
     }
 
@@ -2495,6 +3066,270 @@ export interface IEditContenedorInput {
     nombre: string;
     fechaCreacion: moment.Moment;
     cantidadViajes: number | undefined;
+    estadoId: number;
+}
+
+export class ListResultDtoOfEstadoListDto implements IListResultDtoOfEstadoListDto {
+    items: EstadoListDto[] | undefined;
+
+    constructor(data?: IListResultDtoOfEstadoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(EstadoListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ListResultDtoOfEstadoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListResultDtoOfEstadoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ListResultDtoOfEstadoListDto {
+        const json = this.toJSON();
+        let result = new ListResultDtoOfEstadoListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IListResultDtoOfEstadoListDto {
+    items: EstadoListDto[] | undefined;
+}
+
+export class EstadoListDto implements IEstadoListDto {
+    nombre: string | undefined;
+    isDeleted: boolean | undefined;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment | undefined;
+    creatorUserId: number | undefined;
+    id: number | undefined;
+
+    constructor(data?: IEstadoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.nombre = data["nombre"];
+            this.isDeleted = data["isDeleted"];
+            this.deleterUserId = data["deleterUserId"];
+            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
+            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = data["lastModifierUserId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = data["creatorUserId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): EstadoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EstadoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nombre"] = this.nombre;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone(): EstadoListDto {
+        const json = this.toJSON();
+        let result = new EstadoListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IEstadoListDto {
+    nombre: string | undefined;
+    isDeleted: boolean | undefined;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment | undefined;
+    creatorUserId: number | undefined;
+    id: number | undefined;
+}
+
+export class CrearEstadoInput implements ICrearEstadoInput {
+    nombre: string;
+
+    constructor(data?: ICrearEstadoInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.nombre = data["nombre"];
+        }
+    }
+
+    static fromJS(data: any): CrearEstadoInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new CrearEstadoInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nombre"] = this.nombre;
+        return data; 
+    }
+
+    clone(): CrearEstadoInput {
+        const json = this.toJSON();
+        let result = new CrearEstadoInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICrearEstadoInput {
+    nombre: string;
+}
+
+export class GetEstadoForEditOutput implements IGetEstadoForEditOutput {
+    id: number | undefined;
+    nombre: string | undefined;
+
+    constructor(data?: IGetEstadoForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.nombre = data["nombre"];
+        }
+    }
+
+    static fromJS(data: any): GetEstadoForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetEstadoForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["nombre"] = this.nombre;
+        return data; 
+    }
+
+    clone(): GetEstadoForEditOutput {
+        const json = this.toJSON();
+        let result = new GetEstadoForEditOutput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetEstadoForEditOutput {
+    id: number | undefined;
+    nombre: string | undefined;
+}
+
+export class EditEstadoInput implements IEditEstadoInput {
+    id: number | undefined;
+    nombre: string;
+
+    constructor(data?: IEditEstadoInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.nombre = data["nombre"];
+        }
+    }
+
+    static fromJS(data: any): EditEstadoInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new EditEstadoInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["nombre"] = this.nombre;
+        return data; 
+    }
+
+    clone(): EditEstadoInput {
+        const json = this.toJSON();
+        let result = new EditEstadoInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IEditEstadoInput {
+    id: number | undefined;
+    nombre: string;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {
@@ -4146,6 +4981,341 @@ export class PagedResultDtoOfUserDto implements IPagedResultDtoOfUserDto {
 export interface IPagedResultDtoOfUserDto {
     totalCount: number | undefined;
     items: UserDto[] | undefined;
+}
+
+export class ListResultDtoOfViajeListDto implements IListResultDtoOfViajeListDto {
+    items: ViajeListDto[] | undefined;
+
+    constructor(data?: IListResultDtoOfViajeListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(ViajeListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ListResultDtoOfViajeListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListResultDtoOfViajeListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ListResultDtoOfViajeListDto {
+        const json = this.toJSON();
+        let result = new ListResultDtoOfViajeListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IListResultDtoOfViajeListDto {
+    items: ViajeListDto[] | undefined;
+}
+
+export class ViajeListDto implements IViajeListDto {
+    destino: string | undefined;
+    responsable: string | undefined;
+    fechaInicio: moment.Moment | undefined;
+    fechaFin: moment.Moment | undefined;
+    estadoId: number | undefined;
+    estado: string | undefined;
+    isDeleted: boolean | undefined;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment | undefined;
+    creatorUserId: number | undefined;
+    id: number | undefined;
+
+    constructor(data?: IViajeListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.destino = data["destino"];
+            this.responsable = data["responsable"];
+            this.fechaInicio = data["fechaInicio"] ? moment(data["fechaInicio"].toString()) : <any>undefined;
+            this.fechaFin = data["fechaFin"] ? moment(data["fechaFin"].toString()) : <any>undefined;
+            this.estadoId = data["estadoId"];
+            this.estado = data["estado"];
+            this.isDeleted = data["isDeleted"];
+            this.deleterUserId = data["deleterUserId"];
+            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
+            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = data["lastModifierUserId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = data["creatorUserId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ViajeListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ViajeListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["destino"] = this.destino;
+        data["responsable"] = this.responsable;
+        data["fechaInicio"] = this.fechaInicio ? this.fechaInicio.toISOString() : <any>undefined;
+        data["fechaFin"] = this.fechaFin ? this.fechaFin.toISOString() : <any>undefined;
+        data["estadoId"] = this.estadoId;
+        data["estado"] = this.estado;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone(): ViajeListDto {
+        const json = this.toJSON();
+        let result = new ViajeListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IViajeListDto {
+    destino: string | undefined;
+    responsable: string | undefined;
+    fechaInicio: moment.Moment | undefined;
+    fechaFin: moment.Moment | undefined;
+    estadoId: number | undefined;
+    estado: string | undefined;
+    isDeleted: boolean | undefined;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment | undefined;
+    creatorUserId: number | undefined;
+    id: number | undefined;
+}
+
+export class CrearViajeInput implements ICrearViajeInput {
+    destino: string;
+    responsable: string;
+    fechaInicio: moment.Moment;
+    fechaFin: moment.Moment;
+    estadoId: number;
+
+    constructor(data?: ICrearViajeInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.destino = data["destino"];
+            this.responsable = data["responsable"];
+            this.fechaInicio = data["fechaInicio"] ? moment(data["fechaInicio"].toString()) : <any>undefined;
+            this.fechaFin = data["fechaFin"] ? moment(data["fechaFin"].toString()) : <any>undefined;
+            this.estadoId = data["estadoId"];
+        }
+    }
+
+    static fromJS(data: any): CrearViajeInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new CrearViajeInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["destino"] = this.destino;
+        data["responsable"] = this.responsable;
+        data["fechaInicio"] = this.fechaInicio ? this.fechaInicio.toISOString() : <any>undefined;
+        data["fechaFin"] = this.fechaFin ? this.fechaFin.toISOString() : <any>undefined;
+        data["estadoId"] = this.estadoId;
+        return data; 
+    }
+
+    clone(): CrearViajeInput {
+        const json = this.toJSON();
+        let result = new CrearViajeInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICrearViajeInput {
+    destino: string;
+    responsable: string;
+    fechaInicio: moment.Moment;
+    fechaFin: moment.Moment;
+    estadoId: number;
+}
+
+export class GetViajeForEditOutput implements IGetViajeForEditOutput {
+    id: number | undefined;
+    destino: string | undefined;
+    responsable: string | undefined;
+    fechaInicio: moment.Moment | undefined;
+    fechaFin: moment.Moment | undefined;
+    estadoId: number | undefined;
+    estado: string | undefined;
+
+    constructor(data?: IGetViajeForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.destino = data["destino"];
+            this.responsable = data["responsable"];
+            this.fechaInicio = data["fechaInicio"] ? moment(data["fechaInicio"].toString()) : <any>undefined;
+            this.fechaFin = data["fechaFin"] ? moment(data["fechaFin"].toString()) : <any>undefined;
+            this.estadoId = data["estadoId"];
+            this.estado = data["estado"];
+        }
+    }
+
+    static fromJS(data: any): GetViajeForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetViajeForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["destino"] = this.destino;
+        data["responsable"] = this.responsable;
+        data["fechaInicio"] = this.fechaInicio ? this.fechaInicio.toISOString() : <any>undefined;
+        data["fechaFin"] = this.fechaFin ? this.fechaFin.toISOString() : <any>undefined;
+        data["estadoId"] = this.estadoId;
+        data["estado"] = this.estado;
+        return data; 
+    }
+
+    clone(): GetViajeForEditOutput {
+        const json = this.toJSON();
+        let result = new GetViajeForEditOutput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetViajeForEditOutput {
+    id: number | undefined;
+    destino: string | undefined;
+    responsable: string | undefined;
+    fechaInicio: moment.Moment | undefined;
+    fechaFin: moment.Moment | undefined;
+    estadoId: number | undefined;
+    estado: string | undefined;
+}
+
+export class EditViajeInput implements IEditViajeInput {
+    id: number | undefined;
+    destino: string;
+    responsable: string;
+    fechaInicio: moment.Moment;
+    fechaFin: moment.Moment;
+    estadoId: number;
+
+    constructor(data?: IEditViajeInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.destino = data["destino"];
+            this.responsable = data["responsable"];
+            this.fechaInicio = data["fechaInicio"] ? moment(data["fechaInicio"].toString()) : <any>undefined;
+            this.fechaFin = data["fechaFin"] ? moment(data["fechaFin"].toString()) : <any>undefined;
+            this.estadoId = data["estadoId"];
+        }
+    }
+
+    static fromJS(data: any): EditViajeInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new EditViajeInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["destino"] = this.destino;
+        data["responsable"] = this.responsable;
+        data["fechaInicio"] = this.fechaInicio ? this.fechaInicio.toISOString() : <any>undefined;
+        data["fechaFin"] = this.fechaFin ? this.fechaFin.toISOString() : <any>undefined;
+        data["estadoId"] = this.estadoId;
+        return data; 
+    }
+
+    clone(): EditViajeInput {
+        const json = this.toJSON();
+        let result = new EditViajeInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IEditViajeInput {
+    id: number | undefined;
+    destino: string;
+    responsable: string;
+    fechaInicio: moment.Moment;
+    fechaFin: moment.Moment;
+    estadoId: number;
 }
 
 export enum IsTenantAvailableOutputState {

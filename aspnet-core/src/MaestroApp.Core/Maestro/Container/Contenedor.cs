@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities.Auditing;
+using MaestroApp.Maestro.State;
 using MaestroApp.Maestro.Travel;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,11 @@ namespace MaestroApp.Maestro.Container
 
         public virtual int CantidadViajes { get; set; }
 
-        public virtual ICollection<Viaje> Viajes { get; set; }
+        [ForeignKey("EstadoId")]
+        public virtual Estado Estado { get; set; }
+
+        public virtual int EstadoId { get; set; }
+
 
     }
 }

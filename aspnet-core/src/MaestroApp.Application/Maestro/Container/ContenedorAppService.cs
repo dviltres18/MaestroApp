@@ -58,6 +58,7 @@ namespace MaestroApp.Maestro.Container
             contenedor.Nombre = input.Nombre;
             contenedor.FechaCreacion = input.FechaCreacion;
             contenedor.CantidadViajes = input.CantidadViajes;
+            contenedor.EstadoId = input.EstadoId;
 
 
             await _contenedorRepository.UpdateAsync(contenedor);

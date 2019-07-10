@@ -17,5 +17,8 @@ namespace MaestroApp.Maestro.Container.Dto
         public DateTime FechaCreacion { get; set; }
 
         public int CantidadViajes { get; set; }
+
+        [Required]
+        public int EstadoId { get; set; }
     }
 }

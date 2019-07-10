@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities.Auditing;
 using MaestroApp.Maestro.Container;
+using MaestroApp.Maestro.State;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,9 +16,25 @@ namespace MaestroApp.Maestro.Travel
         [MaxLength(100)]
         public virtual string Destino { get; set; }
 
-        [ForeignKey("ContenedorId")]
-        public virtual Contenedor Contenedor { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public virtual string Responsable { get; set; }
 
-        public virtual int ContenedorId { get; set; }
+        [Required]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd hh:mm tt}", ApplyFormatInEditMode = true)]
+        public virtual DateTime FechaInicio { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd hh:mm tt}", ApplyFormatInEditMode = true)]
+        public virtual DateTime FechaFin { get; set; }
+
+        [ForeignKey("EstadoId")]
+        public virtual Estado Estado { get; set; }
+
+        public virtual int EstadoId { get; set; }
+
+
     }
 }

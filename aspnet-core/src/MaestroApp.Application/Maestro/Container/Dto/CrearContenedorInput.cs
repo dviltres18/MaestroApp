@@ -18,6 +18,9 @@ namespace MaestroApp.Maestro.Container.Dto
 
         public  int CantidadViajes { get; set; }
 
-        
+        [Required]
+        public int EstadoId { get; set; }
+
+
     }
 }

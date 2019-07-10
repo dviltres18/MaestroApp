@@ -7,6 +7,7 @@ using Abp.Localization;
 using MaestroApp.Maestro.Container;
 using MaestroApp.Maestro.State;
 using MaestroApp.Maestro.Travel;
+using MaestroApp.Maestro.TravelContainer;
 
 namespace MaestroApp.EntityFrameworkCore
 {
@@ -18,6 +19,8 @@ namespace MaestroApp.EntityFrameworkCore
         public virtual DbSet<Estado> Estados { get; set; }
 
         public virtual DbSet<Viaje> Viajes { get; set; }
+
+        public virtual DbSet<ViajeContenedor> ViajesContenedores { get; set; }
 
 
         public MaestroAppDbContext(DbContextOptions<MaestroAppDbContext> options)

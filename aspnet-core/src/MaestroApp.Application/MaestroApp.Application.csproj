@@ -13,8 +13,4 @@
   <ItemGroup>
     <ProjectReference Include="..\MaestroApp.Core\MaestroApp.Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Maestro\State\Dto\" />
-    <Folder Include="Maestro\Travel\Dto\" />
-  </ItemGroup>
 </Project>

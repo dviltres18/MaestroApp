@@ -38,6 +38,14 @@ import { EditUserDialogComponent } from '@app/users/edit-user/edit-user-dialog.c
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { ResetPasswordDialogComponent } from './users/reset-password/reset-password.component';
 import { ContenedorComponent } from './contenedor/contenedor.component';
+import { ViajeComponent } from './viaje/viaje.component';
+import { EstadoComponent } from './estado/estado.component';
+import { CrearContenedorComponent } from './contenedor/crear-contenedor/crear-contenedor.component';
+import { EditarContenedorComponent } from './contenedor/editar-contenedor/editar-contenedor.component';
+import { CrearEstadoComponent } from './estado/crear-estado/crear-estado.component';
+import { EditarEstadoComponent } from './estado/editar-estado/editar-estado.component';
+import { CrearViajeComponent } from './viaje/crear-viaje/crear-viaje.component';
+import { EditarViajeComponent } from './viaje/editar-viaje/editar-viaje.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +72,15 @@ import { ContenedorComponent } from './contenedor/contenedor.component';
     EditUserDialogComponent,
     ChangePasswordComponent,
     ResetPasswordDialogComponent,
-    ContenedorComponent
+    ContenedorComponent,
+    ViajeComponent,
+    EstadoComponent,
+    CrearContenedorComponent,
+    EditarContenedorComponent,
+    CrearEstadoComponent,
+    EditarEstadoComponent,
+    CrearViajeComponent,
+    EditarViajeComponent
   ],
   imports: [
     CommonModule,

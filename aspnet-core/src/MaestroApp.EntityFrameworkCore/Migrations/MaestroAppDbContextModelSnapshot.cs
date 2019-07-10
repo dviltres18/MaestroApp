@@ -1025,6 +1025,8 @@ namespace MaestroApp.Migrations
 
                     b.Property<DateTime?>("DeletionTime");
 
+                    b.Property<int>("EstadoId");
+
                     b.Property<DateTime>("FechaCreacion");
 
                     b.Property<bool>("IsDeleted");
@@ -1038,6 +1040,8 @@ namespace MaestroApp.Migrations
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EstadoId");
 
                     b.ToTable("MaestroContenedor");
                 });
@@ -1055,6 +1059,39 @@ namespace MaestroApp.Migrations
 
                     b.Property<DateTime?>("DeletionTime");
 
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<long?>("LastModifierUserId");
+
+                    b.Property<string>("Nombre")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MaestroEstado");
+                });
+
+            modelBuilder.Entity("MaestroApp.Maestro.Travel.Viaje", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<long?>("CreatorUserId");
+
+                    b.Property<long?>("DeleterUserId");
+
+                    b.Property<DateTime?>("DeletionTime");
+
+                    b.Property<string>("Destino")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<int>("EstadoId");
+
                     b.Property<DateTime>("FechaFin");
 
                     b.Property<DateTime>("FechaInicio");
@@ -1071,10 +1108,12 @@ namespace MaestroApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MaestroEstado");
+                    b.HasIndex("EstadoId");
+
+                    b.ToTable("MaestroViaje");
                 });
 
-            modelBuilder.Entity("MaestroApp.Maestro.Travel.Viaje", b =>
+            modelBuilder.Entity("MaestroApp.Maestro.TravelContainer.ViajeContenedor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -1089,21 +1128,21 @@ namespace MaestroApp.Migrations
 
                     b.Property<DateTime?>("DeletionTime");
 
-                    b.Property<string>("Destino")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
                     b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime");
 
                     b.Property<long?>("LastModifierUserId");
 
+                    b.Property<int>("ViajeId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ContenedorId");
 
-                    b.ToTable("MaestroViaje");
+                    b.HasIndex("ViajeId");
+
+                    b.ToTable("MaestroViajeContenedor");
                 });
 
             modelBuilder.Entity("MaestroApp.MultiTenancy.Tenant", b =>
@@ -1305,11 +1344,32 @@ namespace MaestroApp.Migrations
                         .HasForeignKey("LastModifierUserId");
                 });
 
+            modelBuilder.Entity("MaestroApp.Maestro.Container.Contenedor", b =>
+                {
+                    b.HasOne("MaestroApp.Maestro.State.Estado", "Estado")
+                        .WithMany()
+                        .HasForeignKey("EstadoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("MaestroApp.Maestro.Travel.Viaje", b =>
                 {
+                    b.HasOne("MaestroApp.Maestro.State.Estado", "Estado")
+                        .WithMany()
+                        .HasForeignKey("EstadoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MaestroApp.Maestro.TravelContainer.ViajeContenedor", b =>
+                {
                     b.HasOne("MaestroApp.Maestro.Container.Contenedor", "Contenedor")
-                        .WithMany("Viajes")
+                        .WithMany()
                         .HasForeignKey("ContenedorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MaestroApp.Maestro.Travel.Viaje", "Viaje")
+                        .WithMany()
+                        .HasForeignKey("ViajeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
