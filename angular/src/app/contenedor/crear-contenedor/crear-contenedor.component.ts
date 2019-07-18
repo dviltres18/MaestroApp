@@ -1,12 +1,12 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit ,ElementRef, ViewChild} from '@angular/core';
 import { MatDialogRef, MatCheckboxChange } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { AppComponentBase } from '@shared/app-component-base';
-import { ContenedorServiceProxy, CrearContenedorInput} from '@shared/service-proxies/service-proxies';
+import { ContenedorServiceProxy, CrearContenedorInput } from '@shared/service-proxies/service-proxies';
 
-@Component({
-  selector: 'app-crear-contenedor',
+
+@Component({ 
   templateUrl: './crear-contenedor.component.html',
   styles: [
     `
@@ -23,14 +23,13 @@ export class CrearContenedorComponent extends AppComponentBase implements OnInit
 
   saving = false;
   contenedor: CrearContenedorInput = new CrearContenedorInput();
-  
 
   constructor(
     injector: Injector,
     private contenedorServiceProxy: ContenedorServiceProxy,
      private _dialogRef: MatDialogRef<CrearContenedorComponent>   
   ) {
-    super(injector);
+    super(injector);   
   }
 
   ngOnInit(): void {
@@ -59,5 +58,5 @@ export class CrearContenedorComponent extends AppComponentBase implements OnInit
   close(result: any): void {
     this._dialogRef.close(result);
   }
-
+  
 }

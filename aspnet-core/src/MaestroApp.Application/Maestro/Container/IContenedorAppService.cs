@@ -10,6 +10,7 @@ namespace MaestroApp.Maestro.Container
 {
     public interface IContenedorAppService : IApplicationService
     {
+
         ListResultDto<ContenedorListDto> GetContenedores(GetContenedorInput input);
 
         Task CrearContenedor(CrearContenedorInput input);

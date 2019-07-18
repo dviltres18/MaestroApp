@@ -7,5 +7,6 @@ namespace MaestroApp.Maestro.State.Dto
     public class GetEstadoForEditInput
     {
         public int Id { get; set; }
+        
     }
 }

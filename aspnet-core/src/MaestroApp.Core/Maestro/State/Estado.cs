@@ -12,8 +12,12 @@ namespace MaestroApp.Maestro.State
     [Table("MaestroEstado")]
     public class Estado : FullAuditedEntity
     {
+        [Required]
         [MaxLength(100)]
-        public virtual string Nombre { get; set; }      
+        public virtual string Nombre { get; set; }
+
+        [Required]
+        public virtual bool Tipo { get; set; }
 
     }
 }

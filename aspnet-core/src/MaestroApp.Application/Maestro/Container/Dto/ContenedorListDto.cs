@@ -11,14 +11,11 @@ namespace MaestroApp.Maestro.Container.Dto
         
         public string Nombre { get; set; }
        
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd hh:mm tt}", ApplyFormatInEditMode = true)]
-        public  DateTime FechaCreacion { get; set; }
-
         public  int CantidadViajes { get; set; }
 
         public int EstadoId { get; set; }
 
-        public string Estado { get; set; }
+        public EstadoInContenedorListDto Estado { get; set; }
 
     }
 }

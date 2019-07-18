@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using MaestroApp.Maestro.Container.Dto;
 using MaestroApp.Maestro.State;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,6 @@ namespace MaestroApp.Maestro.Travel.Dto
 
         public int EstadoId { get; set; }
 
-        public string Estado { get; set; }
+        public EstadoInViajeListDto Estado { get; set; }
     }
 }

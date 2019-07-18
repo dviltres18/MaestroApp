@@ -1,3 +1,50 @@
-<p>
-  crear-viaje works!
-</p>
+<form autocomplete="off" #createViajeForm="ngForm" (ngSubmit)="save()">
+    <h2 mat-dialog-title>{{ "Create New Viaje" | localize }}</h2>
+    <mat-dialog-content >
+      <div class="row-fluid">
+            <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  name="Name"
+                  [placeholder]="'Destino' | localize"
+                  [(ngModel)]="viaje.destino"
+                  required
+                  minlength="2"
+                  maxlength="32"
+                />
+              </mat-form-field>    
+              <mat-form-field>
+                  <ngb-datepicker #dp (select)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden">
+                    </ngb-datepicker>
+                    
+                    <ng-template #t let-date let-focused="focused">
+                      <span class="custom-day"
+                            [class.focused]="focused"
+                            [class.range]="isRange(date)"
+                            [class.faded]="isHovered(date) || isInside(date)"
+                            (mouseenter)="hoveredDate = date"
+                            (mouseleave)="hoveredDate = null">
+                        {{ date.day }}
+                      </span>
+                    </ng-template>
+               </mat-form-field>         
+            </div>
+      </div>  
+    </mat-dialog-content>
+    <div mat-dialog-actions align="end">
+      <button mat-button type="button" [disabled]="saving" (click)="close(false)">
+        {{ "Cancel" | localize }}
+      </button>
+      <button
+        mat-flat-button
+        type="submit"
+        flex="15"
+        color="primary"
+        [disabled]="!createViajeForm.form.valid || saving"
+      >
+        {{ "Save" | localize }}
+      </button>
+    </div>
+  </form>
+  

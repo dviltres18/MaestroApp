@@ -1,8 +1,10 @@
-﻿using Abp.Application.Services.Dto;
+﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using MaestroApp.Maestro.Container.Dto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +23,15 @@ namespace MaestroApp.Maestro.Container
             _contenedorRepository = contenedorRepository;
         }
 
+
         public ListResultDto<ContenedorListDto> GetContenedores(GetContenedorInput input)
         {
             var contenedores = _contenedorRepository
-                 .GetAll()               
+                 .GetAll()
+                 .Include(c => c.Estado)
                  .WhereIf(!input.Filter.IsNullOrEmpty(),
-                   c => c.Nombre.Contains(input.Filter))
-                 .OrderBy(c => c.Nombre)
-                 .ThenBy(c => c.FechaCreacion)
+                   c => c.Nombre.Contains(input.Filter))                
+                 .OrderBy(c => c.Nombre)                
                  .ToList();
 
             return new ListResultDto<ContenedorListDto>(ObjectMapper.Map<List<ContenedorListDto>>(contenedores));
@@ -38,6 +41,8 @@ namespace MaestroApp.Maestro.Container
         public async Task CrearContenedor(CrearContenedorInput input)
         {
             var contenedor = ObjectMapper.Map<Contenedor>(input);
+            contenedor.EstadoId = 4;
+            contenedor.CantidadViajes = 0;
             await _contenedorRepository.InsertAsync(contenedor);
         }
 
@@ -55,8 +60,7 @@ namespace MaestroApp.Maestro.Container
         public async Task EditContenedor(EditContenedorInput input)
         {
             var contenedor = await _contenedorRepository.GetAsync(input.Id);
-            contenedor.Nombre = input.Nombre;
-            contenedor.FechaCreacion = input.FechaCreacion;
+            contenedor.Nombre = input.Nombre;         
             contenedor.CantidadViajes = input.CantidadViajes;
             contenedor.EstadoId = input.EstadoId;
 

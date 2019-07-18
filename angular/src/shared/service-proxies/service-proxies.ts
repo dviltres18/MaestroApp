@@ -490,12 +490,15 @@ export class EstadoServiceProxy {
 
     /**
      * @param filter (optional) 
+     * @param tipo (optional) 
      * @return Success
      */
-    getEstados(filter: string | null | undefined): Observable<ListResultDtoOfEstadoListDto> {
+    getEstados(filter: string | null | undefined, tipo: boolean | null | undefined): Observable<ListResultDtoOfEstadoListDto> {
         let url_ = this.baseUrl + "/api/services/app/Estado/GetEstados?";
         if (filter !== undefined)
             url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (tipo !== undefined)
+            url_ += "Tipo=" + encodeURIComponent("" + tipo) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -2803,10 +2806,9 @@ export interface IListResultDtoOfContenedorListDto {
 
 export class ContenedorListDto implements IContenedorListDto {
     nombre: string | undefined;
-    fechaCreacion: moment.Moment | undefined;
     cantidadViajes: number | undefined;
     estadoId: number | undefined;
-    estado: string | undefined;
+    estado: EstadoInContenedorListDto | undefined;
     isDeleted: boolean | undefined;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -2828,10 +2830,9 @@ export class ContenedorListDto implements IContenedorListDto {
     init(data?: any) {
         if (data) {
             this.nombre = data["nombre"];
-            this.fechaCreacion = data["fechaCreacion"] ? moment(data["fechaCreacion"].toString()) : <any>undefined;
             this.cantidadViajes = data["cantidadViajes"];
             this.estadoId = data["estadoId"];
-            this.estado = data["estado"];
+            this.estado = data["estado"] ? EstadoInContenedorListDto.fromJS(data["estado"]) : <any>undefined;
             this.isDeleted = data["isDeleted"];
             this.deleterUserId = data["deleterUserId"];
             this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
@@ -2853,10 +2854,9 @@ export class ContenedorListDto implements IContenedorListDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["nombre"] = this.nombre;
-        data["fechaCreacion"] = this.fechaCreacion ? this.fechaCreacion.toISOString() : <any>undefined;
         data["cantidadViajes"] = this.cantidadViajes;
         data["estadoId"] = this.estadoId;
-        data["estado"] = this.estado;
+        data["estado"] = this.estado ? this.estado.toJSON() : <any>undefined;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -2878,10 +2878,9 @@ export class ContenedorListDto implements IContenedorListDto {
 
 export interface IContenedorListDto {
     nombre: string | undefined;
-    fechaCreacion: moment.Moment | undefined;
     cantidadViajes: number | undefined;
     estadoId: number | undefined;
-    estado: string | undefined;
+    estado: EstadoInContenedorListDto | undefined;
     isDeleted: boolean | undefined;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -2892,10 +2891,51 @@ export interface IContenedorListDto {
     id: number | undefined;
 }
 
+export class EstadoInContenedorListDto implements IEstadoInContenedorListDto {
+    nombre: string | undefined;
+
+    constructor(data?: IEstadoInContenedorListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.nombre = data["nombre"];
+        }
+    }
+
+    static fromJS(data: any): EstadoInContenedorListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EstadoInContenedorListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nombre"] = this.nombre;
+        return data; 
+    }
+
+    clone(): EstadoInContenedorListDto {
+        const json = this.toJSON();
+        let result = new EstadoInContenedorListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IEstadoInContenedorListDto {
+    nombre: string | undefined;
+}
+
 export class CrearContenedorInput implements ICrearContenedorInput {
     nombre: string;
-    fechaCreacion: moment.Moment;
-    cantidadViajes: number | undefined;
     estadoId: number;
 
     constructor(data?: ICrearContenedorInput) {
@@ -2910,8 +2950,6 @@ export class CrearContenedorInput implements ICrearContenedorInput {
     init(data?: any) {
         if (data) {
             this.nombre = data["nombre"];
-            this.fechaCreacion = data["fechaCreacion"] ? moment(data["fechaCreacion"].toString()) : <any>undefined;
-            this.cantidadViajes = data["cantidadViajes"];
             this.estadoId = data["estadoId"];
         }
     }
@@ -2926,8 +2964,6 @@ export class CrearContenedorInput implements ICrearContenedorInput {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["nombre"] = this.nombre;
-        data["fechaCreacion"] = this.fechaCreacion ? this.fechaCreacion.toISOString() : <any>undefined;
-        data["cantidadViajes"] = this.cantidadViajes;
         data["estadoId"] = this.estadoId;
         return data; 
     }
@@ -2942,18 +2978,15 @@ export class CrearContenedorInput implements ICrearContenedorInput {
 
 export interface ICrearContenedorInput {
     nombre: string;
-    fechaCreacion: moment.Moment;
-    cantidadViajes: number | undefined;
     estadoId: number;
 }
 
 export class GetContenedorForEditOutput implements IGetContenedorForEditOutput {
     id: number | undefined;
     nombre: string | undefined;
-    fechaCreacion: moment.Moment | undefined;
     cantidadViajes: number | undefined;
     estadoId: number | undefined;
-    estado: string | undefined;
+    estado: EstadoInContenedorListDto | undefined;
 
     constructor(data?: IGetContenedorForEditOutput) {
         if (data) {
@@ -2968,10 +3001,9 @@ export class GetContenedorForEditOutput implements IGetContenedorForEditOutput {
         if (data) {
             this.id = data["id"];
             this.nombre = data["nombre"];
-            this.fechaCreacion = data["fechaCreacion"] ? moment(data["fechaCreacion"].toString()) : <any>undefined;
             this.cantidadViajes = data["cantidadViajes"];
             this.estadoId = data["estadoId"];
-            this.estado = data["estado"];
+            this.estado = data["estado"] ? EstadoInContenedorListDto.fromJS(data["estado"]) : <any>undefined;
         }
     }
 
@@ -2986,10 +3018,9 @@ export class GetContenedorForEditOutput implements IGetContenedorForEditOutput {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["nombre"] = this.nombre;
-        data["fechaCreacion"] = this.fechaCreacion ? this.fechaCreacion.toISOString() : <any>undefined;
         data["cantidadViajes"] = this.cantidadViajes;
         data["estadoId"] = this.estadoId;
-        data["estado"] = this.estado;
+        data["estado"] = this.estado ? this.estado.toJSON() : <any>undefined;
         return data; 
     }
 
@@ -3004,16 +3035,14 @@ export class GetContenedorForEditOutput implements IGetContenedorForEditOutput {
 export interface IGetContenedorForEditOutput {
     id: number | undefined;
     nombre: string | undefined;
-    fechaCreacion: moment.Moment | undefined;
     cantidadViajes: number | undefined;
     estadoId: number | undefined;
-    estado: string | undefined;
+    estado: EstadoInContenedorListDto | undefined;
 }
 
 export class EditContenedorInput implements IEditContenedorInput {
     id: number | undefined;
     nombre: string;
-    fechaCreacion: moment.Moment;
     cantidadViajes: number | undefined;
     estadoId: number;
 
@@ -3030,7 +3059,6 @@ export class EditContenedorInput implements IEditContenedorInput {
         if (data) {
             this.id = data["id"];
             this.nombre = data["nombre"];
-            this.fechaCreacion = data["fechaCreacion"] ? moment(data["fechaCreacion"].toString()) : <any>undefined;
             this.cantidadViajes = data["cantidadViajes"];
             this.estadoId = data["estadoId"];
         }
@@ -3047,7 +3075,6 @@ export class EditContenedorInput implements IEditContenedorInput {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["nombre"] = this.nombre;
-        data["fechaCreacion"] = this.fechaCreacion ? this.fechaCreacion.toISOString() : <any>undefined;
         data["cantidadViajes"] = this.cantidadViajes;
         data["estadoId"] = this.estadoId;
         return data; 
@@ -3064,7 +3091,6 @@ export class EditContenedorInput implements IEditContenedorInput {
 export interface IEditContenedorInput {
     id: number | undefined;
     nombre: string;
-    fechaCreacion: moment.Moment;
     cantidadViajes: number | undefined;
     estadoId: number;
 }
@@ -3122,6 +3148,7 @@ export interface IListResultDtoOfEstadoListDto {
 
 export class EstadoListDto implements IEstadoListDto {
     nombre: string | undefined;
+    tipo: boolean | undefined;
     isDeleted: boolean | undefined;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -3143,6 +3170,7 @@ export class EstadoListDto implements IEstadoListDto {
     init(data?: any) {
         if (data) {
             this.nombre = data["nombre"];
+            this.tipo = data["tipo"];
             this.isDeleted = data["isDeleted"];
             this.deleterUserId = data["deleterUserId"];
             this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
@@ -3164,6 +3192,7 @@ export class EstadoListDto implements IEstadoListDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["nombre"] = this.nombre;
+        data["tipo"] = this.tipo;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -3185,6 +3214,7 @@ export class EstadoListDto implements IEstadoListDto {
 
 export interface IEstadoListDto {
     nombre: string | undefined;
+    tipo: boolean | undefined;
     isDeleted: boolean | undefined;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -3197,6 +3227,7 @@ export interface IEstadoListDto {
 
 export class CrearEstadoInput implements ICrearEstadoInput {
     nombre: string;
+    tipo: boolean;
 
     constructor(data?: ICrearEstadoInput) {
         if (data) {
@@ -3210,6 +3241,7 @@ export class CrearEstadoInput implements ICrearEstadoInput {
     init(data?: any) {
         if (data) {
             this.nombre = data["nombre"];
+            this.tipo = data["tipo"];
         }
     }
 
@@ -3223,6 +3255,7 @@ export class CrearEstadoInput implements ICrearEstadoInput {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["nombre"] = this.nombre;
+        data["tipo"] = this.tipo;
         return data; 
     }
 
@@ -3236,11 +3269,13 @@ export class CrearEstadoInput implements ICrearEstadoInput {
 
 export interface ICrearEstadoInput {
     nombre: string;
+    tipo: boolean;
 }
 
 export class GetEstadoForEditOutput implements IGetEstadoForEditOutput {
     id: number | undefined;
     nombre: string | undefined;
+    tipo: boolean | undefined;
 
     constructor(data?: IGetEstadoForEditOutput) {
         if (data) {
@@ -3255,6 +3290,7 @@ export class GetEstadoForEditOutput implements IGetEstadoForEditOutput {
         if (data) {
             this.id = data["id"];
             this.nombre = data["nombre"];
+            this.tipo = data["tipo"];
         }
     }
 
@@ -3269,6 +3305,7 @@ export class GetEstadoForEditOutput implements IGetEstadoForEditOutput {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["nombre"] = this.nombre;
+        data["tipo"] = this.tipo;
         return data; 
     }
 
@@ -3283,11 +3320,13 @@ export class GetEstadoForEditOutput implements IGetEstadoForEditOutput {
 export interface IGetEstadoForEditOutput {
     id: number | undefined;
     nombre: string | undefined;
+    tipo: boolean | undefined;
 }
 
 export class EditEstadoInput implements IEditEstadoInput {
     id: number | undefined;
     nombre: string;
+    tipo: boolean;
 
     constructor(data?: IEditEstadoInput) {
         if (data) {
@@ -3302,6 +3341,7 @@ export class EditEstadoInput implements IEditEstadoInput {
         if (data) {
             this.id = data["id"];
             this.nombre = data["nombre"];
+            this.tipo = data["tipo"];
         }
     }
 
@@ -3316,6 +3356,7 @@ export class EditEstadoInput implements IEditEstadoInput {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["nombre"] = this.nombre;
+        data["tipo"] = this.tipo;
         return data; 
     }
 
@@ -3330,6 +3371,7 @@ export class EditEstadoInput implements IEditEstadoInput {
 export interface IEditEstadoInput {
     id: number | undefined;
     nombre: string;
+    tipo: boolean;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {

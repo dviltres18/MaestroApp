@@ -30,5 +30,7 @@ namespace MaestroApp.Maestro.Travel.Dto
 
         [Required]
         public int EstadoId { get; set; }
+
+        public EstadoInViajeListDto Estado { get; set; }
     }
 }

@@ -12,6 +12,9 @@ namespace MaestroApp.Maestro.State.Dto
         [MaxLength(100)]
         [Required]
         public string Nombre { get; set; }
-       
+
+        [Required]
+        public bool Tipo { get; set; }
+
     }
 }

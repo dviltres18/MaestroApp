@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MaestroApp.Maestro.State;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +22,10 @@ namespace MaestroApp.Maestro.Container.Dto
             CreateMap<GetContenedorForEditOutput, Contenedor>();
             CreateMap<Contenedor, GetContenedorForEditOutput>();
 
-           
+            //                Estado
+            CreateMap<EstadoInContenedorListDto, Estado>();
+            CreateMap<Estado, EstadoInContenedorListDto>();
+
         }
     }
 }

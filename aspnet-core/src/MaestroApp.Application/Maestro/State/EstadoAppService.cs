@@ -7,6 +7,7 @@ using Abp.Application.Services.Dto;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
+using Abp.Linq.Extensions;
 using MaestroApp.Maestro.State.Dto;
 
 namespace MaestroApp.Maestro.State
@@ -25,9 +26,9 @@ namespace MaestroApp.Maestro.State
         {
             var estados = _estadoRepository
                  .GetAll()
-                 .WhereIf(!input.Filter.IsNullOrEmpty(),
-                   e => e.Nombre.Contains(input.Filter))
-                 .OrderBy(e => e.Nombre)                
+                 .Where(
+                  e => e.Nombre.Contains(input.Filter) ||
+                  e.Tipo == input.Tipo)                            
                  .ToList();
 
             return new ListResultDto<EstadoListDto>(ObjectMapper.Map<List<EstadoListDto>>(estados));
@@ -55,6 +56,7 @@ namespace MaestroApp.Maestro.State
         {
             var estado = await _estadoRepository.GetAsync(input.Id);
             estado.Nombre = input.Nombre;
+            estado.Tipo = input.Tipo;
             
             await _estadoRepository.UpdateAsync(estado);
         }

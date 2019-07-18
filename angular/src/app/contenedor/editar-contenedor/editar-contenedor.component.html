@@ -1,3 +1,41 @@
-<p>
-  editar-contenedor works!
-</p>
+<form autocomplete="off" #editContenedorForm="ngForm" (ngSubmit)="save()">
+    <h1 mat-dialog-title>{{ "EditContenedor" | localize }}</h1>
+    <mat-dialog-content>
+        <div class="row-fluid">
+            <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  name="Name"
+                  [placeholder]="'Name' | localize"
+                  [(ngModel)]="contenedor.nombre"
+                  required
+                  minlength="2"
+                  maxlength="32"
+                />
+              </mat-form-field> 
+              <mat-form-field>
+                  <mat-label>Seleccionar estado</mat-label>
+                  <mat-select [(ngModel)]="contenedor.estadoId" required  name="estado">                  
+                    <mat-option *ngFor="let estado of estados" [value] ="estado.id" >{{estado.nombre}}</mat-option>                   
+                  </mat-select>
+                </mat-form-field>                     
+            </div>
+      </div>       
+    </mat-dialog-content>
+    <div mat-dialog-actions align="end">
+      <button mat-button type="button" [disabled]="saving" (click)="close(false)">
+        {{ "Cancel" | localize }}
+      </button>
+      <button
+        mat-flat-button
+        type="submit"
+        flex="15"
+        color="primary"
+        [disabled]="!editContenedorForm.form.valid || saving"
+      >
+        {{ "Save" | localize }}
+      </button>
+    </div>
+  </form>
+  

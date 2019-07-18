@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MaestroApp.Maestro.State;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,6 +21,11 @@ namespace MaestroApp.Maestro.Travel.Dto
             //            Edit Viaje
             CreateMap<GetViajeForEditOutput, Viaje>();
             CreateMap<Viaje, GetViajeForEditOutput>();
+
+            //                Estado
+            CreateMap<EstadoInViajeListDto, Estado>();
+            CreateMap<Estado, EstadoInViajeListDto>();
+
         }
     }
 }

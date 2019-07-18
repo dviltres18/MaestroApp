@@ -16,11 +16,6 @@ namespace MaestroApp.Maestro.Container
         [MaxLength(100)]
         public virtual string Nombre { get; set; }
 
-        [Required]
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd hh:mm tt}", ApplyFormatInEditMode = true)]
-        public virtual DateTime FechaCreacion { get; set; }
-
         public virtual int CantidadViajes { get; set; }
 
         [ForeignKey("EstadoId")]

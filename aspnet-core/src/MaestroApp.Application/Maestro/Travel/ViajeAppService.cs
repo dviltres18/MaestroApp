@@ -3,6 +3,7 @@ using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using MaestroApp.Maestro.Travel.Dto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace MaestroApp.Maestro.Travel
         {
             var viajes = _viajeRepository
                  .GetAll()
+                 .Include(v => v.Estado)
                  .WhereIf(!input.Filter.IsNullOrEmpty(),
                    v => v.Destino.Contains(input.Filter))
                  .OrderBy(v => v.Destino)

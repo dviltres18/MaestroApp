@@ -6,10 +6,11 @@ import {
     PagedListingComponentBase,
     PagedRequestDto
 } from '@shared/paged-listing-component-base';
-import { ContenedorServiceProxy, ContenedorListDto, ContenedorDto} from '@shared/service-proxies/service-proxies';
+import { ContenedorServiceProxy, ContenedorListDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/app-component-base';
 import { CrearContenedorComponent } from './crear-contenedor/crear-contenedor.component';
 import { EditarContenedorComponent } from './editar-contenedor/editar-contenedor.component';
+
 
 @Component({
   templateUrl: './contenedor.component.html',
@@ -22,16 +23,9 @@ import { EditarContenedorComponent } from './editar-contenedor/editar-contenedor
       `
   ]
 })
-export class ContenedorComponent extends PagedListingComponentBase<ContenedorDto>  {
+export class ContenedorComponent extends AppComponentBase implements  OnInit
+{
   
-  
-  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    throw new Error("Method not implemented.");
-  }
-  protected delete(entity: any): void {
-    throw new Error("Method not implemented.");
-  }
-
   keyword = '';
   contenedores: ContenedorListDto[] = [];
 
@@ -43,12 +37,31 @@ export class ContenedorComponent extends PagedListingComponentBase<ContenedorDto
         super(injector);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getContenedores();
   }
 
+delete(contenedor: ContenedorListDto): void {
+    abp.message.confirm(
+        this.l('ContenedorDeleteWarningMessage', contenedor.nombre),
+        (result: boolean) => {
+            if (result) {
+                this._contenedorService
+                    .deleteContenedor(contenedor.id)
+                    .pipe(
+                        finalize(() => {
+                            abp.notify.success(this.l('SuccessfullyDeleted'));
+                            this.refresh();
+                        })
+                    )
+                    .subscribe(() => { });
+            }
+        }
+    );
+}
+
   refresh(): void {
-    this.getDataPage(this.pageNumber);
+    this.getContenedores();
   }
 
   getContenedores(): void {
@@ -58,24 +71,24 @@ export class ContenedorComponent extends PagedListingComponentBase<ContenedorDto
     });
   }
   createContenedor(): void {
-    this.showCreateOrEditRoleDialog();
+    this.showCreateOrEditContenedorDialog();
   }
 
-  editContenedor(contenedor: ContenedorDto): void {
-    this.showCreateOrEditRoleDialog(contenedor.id);
+  editContenedor(contenedor: ContenedorListDto): void {
+    this.showCreateOrEditContenedorDialog(contenedor.id);
   }
 
-  showCreateOrEditRoleDialog(id?: number): void {
-    let createOrEditRoleDialog;
+  showCreateOrEditContenedorDialog(id?: number): void {
+    let createOrEditContenedorDialog;
     if (id === undefined || id <= 0) {
-        createOrEditRoleDialog = this._dialog.open(CrearContenedorComponent);
+      createOrEditContenedorDialog = this._dialog.open(CrearContenedorComponent);
     } else {
-        createOrEditRoleDialog = this._dialog.open(EditarContenedorComponent, {
+      createOrEditContenedorDialog = this._dialog.open(EditarContenedorComponent, {
             data: id
         });
     }
 
-    createOrEditRoleDialog.afterClosed().subscribe(result => {
+    createOrEditContenedorDialog.afterClosed().subscribe(result => {
         if (result) {
             this.refresh();
         }
