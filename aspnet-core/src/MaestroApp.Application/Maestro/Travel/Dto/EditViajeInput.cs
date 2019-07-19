@@ -1,6 +1,7 @@
 ﻿using MaestroApp.Maestro.State;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
@@ -32,5 +33,9 @@ namespace MaestroApp.Maestro.Travel.Dto
         public int EstadoId { get; set; }
 
         public EstadoInViajeListDto Estado { get; set; }
+
+        public Collection<AddContenedorInput> ContenedoresSelec { get; set; }
+
+        public Collection<AddContenedorInput> ContenedoresDisponibles { get; set; }
     }
 }

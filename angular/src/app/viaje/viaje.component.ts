@@ -6,7 +6,7 @@ import {
     PagedListingComponentBase,
     PagedRequestDto
 } from '@shared/paged-listing-component-base';
-import { ViajeServiceProxy, ViajeListDto } from '@shared/service-proxies/service-proxies';
+import { ViajeServiceProxy, ViajeListDto, EditViajeInput } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/app-component-base';
 import { CrearViajeComponent } from './crear-viaje/crear-viaje.component';
 import { EditarViajeComponent } from './editar-viaje/editar-viaje.component';
@@ -78,20 +78,43 @@ delete(viaje: ViajeListDto): void {
   }
 
   showCreateOrEditViajeDialog(id?: number): void {
-    let createOrEditViajeDialog;
-    if (id === undefined || id <= 0) {
-      createOrEditViajeDialog = this._dialog.open(CrearViajeComponent);
-    } else {
-      createOrEditViajeDialog = this._dialog.open(EditarViajeComponent, {
-            data: id
-        });
-    }
+      let createOrEditViajeDialog;
+      if (id === undefined || id <= 0) {
+        createOrEditViajeDialog = this._dialog.open(CrearViajeComponent);
+      } else {
+        createOrEditViajeDialog = this._dialog.open(EditarViajeComponent, {
+              data: id
+          });
+      }
 
-    createOrEditViajeDialog.afterClosed().subscribe(result => {
-        if (result) {
-            this.refresh();
+      createOrEditViajeDialog.afterClosed().subscribe(result => {
+          if (result) {
+              this.refresh();
+          }
+      });
+  }
+
+  finalizarViaje(viaje: ViajeListDto): void {
+
+    let editViajeInput:EditViajeInput = new EditViajeInput()
+    editViajeInput.id= viaje.id;
+
+    abp.message.confirm(
+        this.l('ViajeFinalizar', viaje.destino),
+        (result: boolean) => {
+            if (result) {
+                this._viajeService
+                    .finalizarViaje(editViajeInput)
+                    .pipe(
+                        finalize(() => {
+                            abp.notify.success(this.l('Successfully'));
+                            this.refresh();
+                        })
+                    )
+                    .subscribe(() => { });
+            }
         }
-    });
+    );
 }
 
 }

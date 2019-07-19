@@ -73,6 +73,10 @@
                                       <mat-icon>delete</mat-icon>
                                       <span>{{ "Delete" | localize }}</span>
                                   </button>
+                                  <button mat-menu-item (click)="finalizarViaje(viaje)">
+                                    <mat-icon>flight land</mat-icon>
+                                    <span>{{ "Finalizar viaje" | localize }}</span>
+                                </button>
                               </mat-menu>
                           </td>
                       </tr>

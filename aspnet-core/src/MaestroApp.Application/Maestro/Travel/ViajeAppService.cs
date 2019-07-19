@@ -2,6 +2,7 @@
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
+using Abp.Linq.Extensions;
 using MaestroApp.Maestro.Container;
 using MaestroApp.Maestro.Travel.Dto;
 using MaestroApp.Maestro.TravelContainer;
@@ -24,7 +25,7 @@ namespace MaestroApp.Maestro.Travel
         public ViajeAppService(
             IRepository<Viaje> viajeRepository,
             IRepository<Contenedor> contenedorRepository,
-             IRepository<ViajeContenedor> viajeContenedorRepository
+            IRepository<ViajeContenedor> viajeContenedorRepository
         )
         {
             _viajeRepository = viajeRepository;
@@ -67,11 +68,46 @@ namespace MaestroApp.Maestro.Travel
         public async Task EditViaje(EditViajeInput input)
         {
             var viaje = await _viajeRepository.GetAsync(input.Id);
-            viaje.Destino = input.Destino;         
+            viaje.Destino = input.Destino;
             viaje.FechaInicio = input.FechaInicio;
             viaje.FechaFin = input.FechaFin;
             viaje.Responsable = input.Responsable;
             viaje.EstadoId = input.EstadoId;
+
+
+            foreach (var item in input.ContenedoresSelec)
+            {
+                var contenedor = _viajeContenedorRepository.FirstOrDefault(cs => cs.ViajeId == input.Id && cs.ContenedorId == item.ContenedorId);
+                if (contenedor == null)
+                {
+                    var viajecontenedor = ObjectMapper.Map<ViajeContenedor>(item);
+                    await _viajeContenedorRepository.InsertAsync(viajecontenedor);
+
+                    var conten = await _contenedorRepository.GetAsync(viajecontenedor.ContenedorId);                                                     
+
+                    if (conten != null)
+                    {                       
+                        conten.EstadoId = 5;                       
+                        await _contenedorRepository.UpdateAsync(conten);
+                    }
+                }
+            }
+
+            foreach (var item2 in input.ContenedoresDisponibles)
+            {
+                var cont = _viajeContenedorRepository.FirstOrDefault(cd => cd.ViajeId == input.Id && cd.ContenedorId == item2.ContenedorId);
+
+                if (cont != null)
+                {
+                    await _viajeContenedorRepository.DeleteAsync(cont);
+
+                    var contEliminado = await _contenedorRepository.GetAsync(cont.ContenedorId);                    
+                    contEliminado.EstadoId = 4;
+                    await _contenedorRepository.UpdateAsync(contEliminado);
+
+                }
+
+            }
 
             await _viajeRepository.UpdateAsync(viaje);
         }
@@ -79,20 +115,22 @@ namespace MaestroApp.Maestro.Travel
         public ListResultDto<ContenedoresDispViajeListDto> GetContenedoresDispViajes(GetContenedoresViajeInput input)
         {
             var contenedores = _contenedorRepository
-                .GetAll()
-                .ToList();
+                 .GetAll()
+                 .Where(c => c.EstadoId == 4)
+                 .ToList();
+
 
             var list = new List<ContenedoresDispViajeListDto>();
 
             foreach (var item in contenedores)
             {
-                var contenedor = _viajeContenedorRepository.FirstOrDefault(c => c.ViajeId == input.Id && c.ContenedorId == item.Id);
+                var contenedor = _viajeContenedorRepository.FirstOrDefault(vc => vc.ViajeId == input.Id && vc.ContenedorId == item.Id);
 
                 if (contenedor == null)
                 {
                     list.Add(new ContenedoresDispViajeListDto
                     {
-                        Nombre = item.Nombre,                     
+                        Nombre = item.Nombre,
                         ContenedorId = item.Id,
                         EstadoId = item.EstadoId,
                         ViajeId = input.Id
@@ -115,14 +153,38 @@ namespace MaestroApp.Maestro.Travel
             var list = new List<ContenedorInViajeListDto>();
             contenedores.ForEach(c => list.Add(new ContenedorInViajeListDto
             {
-                Nombre = c.Nombre,               
+                Nombre = c.Nombre,
                 ContenedorId = c.Id,
                 EstadoId = c.EstadoId,
                 ViajeId = input.Id
-            }));                       
+            }));
 
             return new ListResultDto<ContenedorInViajeListDto>(list);
         }
 
+        public async Task FinalizarViaje(FinalizarViajeInput input)
+        {
+            var viaje = await _viajeRepository.GetAsync(input.Id);
+
+            var contenedores = _viajeContenedorRepository
+              .GetAll()
+              .Where(c => c.ViajeId == input.Id)            
+              .ToList();
+
+            foreach (var item in contenedores)
+            {
+                var cont =  await _contenedorRepository.GetAsync(item.ContenedorId);
+                if (cont != null)
+                {                   
+                    cont.CantidadViajes = cont.CantidadViajes+1;
+                    cont.EstadoId = 4;
+
+                    await _contenedorRepository.UpdateAsync(cont);
+                }
+
+            }
+            viaje.EstadoId = 3;
+            await _viajeRepository.UpdateAsync(viaje);
+        }
     }
 }

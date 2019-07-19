@@ -2512,6 +2512,166 @@ export class ViajeServiceProxy {
         }
         return _observableOf<void>(<any>null);
     }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getContenedoresDispViajes(id: number | null | undefined): Observable<ListResultDtoOfContenedoresDispViajeListDto> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/GetContenedoresDispViajes?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetContenedoresDispViajes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetContenedoresDispViajes(<any>response_);
+                } catch (e) {
+                    return <Observable<ListResultDtoOfContenedoresDispViajeListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ListResultDtoOfContenedoresDispViajeListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetContenedoresDispViajes(response: HttpResponseBase): Observable<ListResultDtoOfContenedoresDispViajeListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ListResultDtoOfContenedoresDispViajeListDto.fromJS(resultData200) : new ListResultDtoOfContenedoresDispViajeListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ListResultDtoOfContenedoresDispViajeListDto>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getContenedorViaje(id: number | null | undefined): Observable<ListResultDtoOfContenedorInViajeListDto> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/GetContenedorViaje?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetContenedorViaje(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetContenedorViaje(<any>response_);
+                } catch (e) {
+                    return <Observable<ListResultDtoOfContenedorInViajeListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ListResultDtoOfContenedorInViajeListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetContenedorViaje(response: HttpResponseBase): Observable<ListResultDtoOfContenedorInViajeListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ListResultDtoOfContenedorInViajeListDto.fromJS(resultData200) : new ListResultDtoOfContenedorInViajeListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ListResultDtoOfContenedorInViajeListDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    finalizarViaje(input: FinalizarViajeInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/FinalizarViaje";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFinalizarViaje(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFinalizarViaje(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processFinalizarViaje(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
 }
 
 export class IsTenantAvailableInput implements IIsTenantAvailableInput {
@@ -5082,7 +5242,7 @@ export class ViajeListDto implements IViajeListDto {
     fechaInicio: moment.Moment | undefined;
     fechaFin: moment.Moment | undefined;
     estadoId: number | undefined;
-    estado: string | undefined;
+    estado: EstadoInViajeListDto | undefined;
     isDeleted: boolean | undefined;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -5108,7 +5268,7 @@ export class ViajeListDto implements IViajeListDto {
             this.fechaInicio = data["fechaInicio"] ? moment(data["fechaInicio"].toString()) : <any>undefined;
             this.fechaFin = data["fechaFin"] ? moment(data["fechaFin"].toString()) : <any>undefined;
             this.estadoId = data["estadoId"];
-            this.estado = data["estado"];
+            this.estado = data["estado"] ? EstadoInViajeListDto.fromJS(data["estado"]) : <any>undefined;
             this.isDeleted = data["isDeleted"];
             this.deleterUserId = data["deleterUserId"];
             this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
@@ -5134,7 +5294,7 @@ export class ViajeListDto implements IViajeListDto {
         data["fechaInicio"] = this.fechaInicio ? this.fechaInicio.toISOString() : <any>undefined;
         data["fechaFin"] = this.fechaFin ? this.fechaFin.toISOString() : <any>undefined;
         data["estadoId"] = this.estadoId;
-        data["estado"] = this.estado;
+        data["estado"] = this.estado ? this.estado.toJSON() : <any>undefined;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -5160,7 +5320,7 @@ export interface IViajeListDto {
     fechaInicio: moment.Moment | undefined;
     fechaFin: moment.Moment | undefined;
     estadoId: number | undefined;
-    estado: string | undefined;
+    estado: EstadoInViajeListDto | undefined;
     isDeleted: boolean | undefined;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -5169,6 +5329,49 @@ export interface IViajeListDto {
     creationTime: moment.Moment | undefined;
     creatorUserId: number | undefined;
     id: number | undefined;
+}
+
+export class EstadoInViajeListDto implements IEstadoInViajeListDto {
+    nombre: string | undefined;
+
+    constructor(data?: IEstadoInViajeListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.nombre = data["nombre"];
+        }
+    }
+
+    static fromJS(data: any): EstadoInViajeListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EstadoInViajeListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nombre"] = this.nombre;
+        return data; 
+    }
+
+    clone(): EstadoInViajeListDto {
+        const json = this.toJSON();
+        let result = new EstadoInViajeListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IEstadoInViajeListDto {
+    nombre: string | undefined;
 }
 
 export class CrearViajeInput implements ICrearViajeInput {
@@ -5237,7 +5440,7 @@ export class GetViajeForEditOutput implements IGetViajeForEditOutput {
     fechaInicio: moment.Moment | undefined;
     fechaFin: moment.Moment | undefined;
     estadoId: number | undefined;
-    estado: string | undefined;
+    estado: EstadoInViajeListDto | undefined;
 
     constructor(data?: IGetViajeForEditOutput) {
         if (data) {
@@ -5256,7 +5459,7 @@ export class GetViajeForEditOutput implements IGetViajeForEditOutput {
             this.fechaInicio = data["fechaInicio"] ? moment(data["fechaInicio"].toString()) : <any>undefined;
             this.fechaFin = data["fechaFin"] ? moment(data["fechaFin"].toString()) : <any>undefined;
             this.estadoId = data["estadoId"];
-            this.estado = data["estado"];
+            this.estado = data["estado"] ? EstadoInViajeListDto.fromJS(data["estado"]) : <any>undefined;
         }
     }
 
@@ -5275,7 +5478,7 @@ export class GetViajeForEditOutput implements IGetViajeForEditOutput {
         data["fechaInicio"] = this.fechaInicio ? this.fechaInicio.toISOString() : <any>undefined;
         data["fechaFin"] = this.fechaFin ? this.fechaFin.toISOString() : <any>undefined;
         data["estadoId"] = this.estadoId;
-        data["estado"] = this.estado;
+        data["estado"] = this.estado ? this.estado.toJSON() : <any>undefined;
         return data; 
     }
 
@@ -5294,7 +5497,7 @@ export interface IGetViajeForEditOutput {
     fechaInicio: moment.Moment | undefined;
     fechaFin: moment.Moment | undefined;
     estadoId: number | undefined;
-    estado: string | undefined;
+    estado: EstadoInViajeListDto | undefined;
 }
 
 export class EditViajeInput implements IEditViajeInput {
@@ -5304,6 +5507,9 @@ export class EditViajeInput implements IEditViajeInput {
     fechaInicio: moment.Moment;
     fechaFin: moment.Moment;
     estadoId: number;
+    estado: EstadoInViajeListDto | undefined;
+    contenedoresSelec: AddContenedorInput[] | undefined;
+    contenedoresDisponibles: AddContenedorInput[] | undefined;
 
     constructor(data?: IEditViajeInput) {
         if (data) {
@@ -5322,6 +5528,17 @@ export class EditViajeInput implements IEditViajeInput {
             this.fechaInicio = data["fechaInicio"] ? moment(data["fechaInicio"].toString()) : <any>undefined;
             this.fechaFin = data["fechaFin"] ? moment(data["fechaFin"].toString()) : <any>undefined;
             this.estadoId = data["estadoId"];
+            this.estado = data["estado"] ? EstadoInViajeListDto.fromJS(data["estado"]) : <any>undefined;
+            if (data["contenedoresSelec"] && data["contenedoresSelec"].constructor === Array) {
+                this.contenedoresSelec = [];
+                for (let item of data["contenedoresSelec"])
+                    this.contenedoresSelec.push(AddContenedorInput.fromJS(item));
+            }
+            if (data["contenedoresDisponibles"] && data["contenedoresDisponibles"].constructor === Array) {
+                this.contenedoresDisponibles = [];
+                for (let item of data["contenedoresDisponibles"])
+                    this.contenedoresDisponibles.push(AddContenedorInput.fromJS(item));
+            }
         }
     }
 
@@ -5340,6 +5557,17 @@ export class EditViajeInput implements IEditViajeInput {
         data["fechaInicio"] = this.fechaInicio ? this.fechaInicio.toISOString() : <any>undefined;
         data["fechaFin"] = this.fechaFin ? this.fechaFin.toISOString() : <any>undefined;
         data["estadoId"] = this.estadoId;
+        data["estado"] = this.estado ? this.estado.toJSON() : <any>undefined;
+        if (this.contenedoresSelec && this.contenedoresSelec.constructor === Array) {
+            data["contenedoresSelec"] = [];
+            for (let item of this.contenedoresSelec)
+                data["contenedoresSelec"].push(item.toJSON());
+        }
+        if (this.contenedoresDisponibles && this.contenedoresDisponibles.constructor === Array) {
+            data["contenedoresDisponibles"] = [];
+            for (let item of this.contenedoresDisponibles)
+                data["contenedoresDisponibles"].push(item.toJSON());
+        }
         return data; 
     }
 
@@ -5358,6 +5586,311 @@ export interface IEditViajeInput {
     fechaInicio: moment.Moment;
     fechaFin: moment.Moment;
     estadoId: number;
+    estado: EstadoInViajeListDto | undefined;
+    contenedoresSelec: AddContenedorInput[] | undefined;
+    contenedoresDisponibles: AddContenedorInput[] | undefined;
+}
+
+export class AddContenedorInput implements IAddContenedorInput {
+    viajeId: number;
+    contenedorId: number;
+
+    constructor(data?: IAddContenedorInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.viajeId = data["viajeId"];
+            this.contenedorId = data["contenedorId"];
+        }
+    }
+
+    static fromJS(data: any): AddContenedorInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddContenedorInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["viajeId"] = this.viajeId;
+        data["contenedorId"] = this.contenedorId;
+        return data; 
+    }
+
+    clone(): AddContenedorInput {
+        const json = this.toJSON();
+        let result = new AddContenedorInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAddContenedorInput {
+    viajeId: number;
+    contenedorId: number;
+}
+
+export class ListResultDtoOfContenedoresDispViajeListDto implements IListResultDtoOfContenedoresDispViajeListDto {
+    items: ContenedoresDispViajeListDto[] | undefined;
+
+    constructor(data?: IListResultDtoOfContenedoresDispViajeListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(ContenedoresDispViajeListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ListResultDtoOfContenedoresDispViajeListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListResultDtoOfContenedoresDispViajeListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ListResultDtoOfContenedoresDispViajeListDto {
+        const json = this.toJSON();
+        let result = new ListResultDtoOfContenedoresDispViajeListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IListResultDtoOfContenedoresDispViajeListDto {
+    items: ContenedoresDispViajeListDto[] | undefined;
+}
+
+export class ContenedoresDispViajeListDto implements IContenedoresDispViajeListDto {
+    viajeId: number | undefined;
+    contenedorId: number | undefined;
+    nombre: string | undefined;
+    estadoId: number | undefined;
+
+    constructor(data?: IContenedoresDispViajeListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.viajeId = data["viajeId"];
+            this.contenedorId = data["contenedorId"];
+            this.nombre = data["nombre"];
+            this.estadoId = data["estadoId"];
+        }
+    }
+
+    static fromJS(data: any): ContenedoresDispViajeListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContenedoresDispViajeListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["viajeId"] = this.viajeId;
+        data["contenedorId"] = this.contenedorId;
+        data["nombre"] = this.nombre;
+        data["estadoId"] = this.estadoId;
+        return data; 
+    }
+
+    clone(): ContenedoresDispViajeListDto {
+        const json = this.toJSON();
+        let result = new ContenedoresDispViajeListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IContenedoresDispViajeListDto {
+    viajeId: number | undefined;
+    contenedorId: number | undefined;
+    nombre: string | undefined;
+    estadoId: number | undefined;
+}
+
+export class ListResultDtoOfContenedorInViajeListDto implements IListResultDtoOfContenedorInViajeListDto {
+    items: ContenedorInViajeListDto[] | undefined;
+
+    constructor(data?: IListResultDtoOfContenedorInViajeListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(ContenedorInViajeListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ListResultDtoOfContenedorInViajeListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListResultDtoOfContenedorInViajeListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ListResultDtoOfContenedorInViajeListDto {
+        const json = this.toJSON();
+        let result = new ListResultDtoOfContenedorInViajeListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IListResultDtoOfContenedorInViajeListDto {
+    items: ContenedorInViajeListDto[] | undefined;
+}
+
+export class ContenedorInViajeListDto implements IContenedorInViajeListDto {
+    viajeId: number | undefined;
+    contenedorId: number | undefined;
+    nombre: string | undefined;
+    estadoId: number | undefined;
+
+    constructor(data?: IContenedorInViajeListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.viajeId = data["viajeId"];
+            this.contenedorId = data["contenedorId"];
+            this.nombre = data["nombre"];
+            this.estadoId = data["estadoId"];
+        }
+    }
+
+    static fromJS(data: any): ContenedorInViajeListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContenedorInViajeListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["viajeId"] = this.viajeId;
+        data["contenedorId"] = this.contenedorId;
+        data["nombre"] = this.nombre;
+        data["estadoId"] = this.estadoId;
+        return data; 
+    }
+
+    clone(): ContenedorInViajeListDto {
+        const json = this.toJSON();
+        let result = new ContenedorInViajeListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IContenedorInViajeListDto {
+    viajeId: number | undefined;
+    contenedorId: number | undefined;
+    nombre: string | undefined;
+    estadoId: number | undefined;
+}
+
+export class FinalizarViajeInput implements IFinalizarViajeInput {
+    id: number | undefined;
+
+    constructor(data?: IFinalizarViajeInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): FinalizarViajeInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new FinalizarViajeInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone(): FinalizarViajeInput {
+        const json = this.toJSON();
+        let result = new FinalizarViajeInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IFinalizarViajeInput {
+    id: number | undefined;
 }
 
 export enum IsTenantAvailableOutputState {

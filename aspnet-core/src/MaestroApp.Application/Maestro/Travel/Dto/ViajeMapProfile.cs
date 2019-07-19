@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using MaestroApp.Maestro.Container;
 using MaestroApp.Maestro.State;
+using MaestroApp.Maestro.TravelContainer;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,6 +27,14 @@ namespace MaestroApp.Maestro.Travel.Dto
             //                Estado
             CreateMap<EstadoInViajeListDto, Estado>();
             CreateMap<Estado, EstadoInViajeListDto>();
+
+            //           Add  Contenedor al viaje
+            CreateMap<AddContenedorInput, ViajeContenedor>();
+            CreateMap<ViajeContenedor, AddContenedorInput>();
+
+            //          edit estado  Contenedor
+            CreateMap<EditContenedorInput, Contenedor>();
+            CreateMap<Contenedor, EditContenedorInput>();
 
         }
     }
