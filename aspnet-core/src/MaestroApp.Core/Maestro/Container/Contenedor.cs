@@ -1,6 +1,7 @@
 ﻿using Abp.Domain.Entities.Auditing;
 using MaestroApp.Maestro.State;
 using MaestroApp.Maestro.Travel;
+using MaestroApp.Maestro.TravelContainer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,6 +24,7 @@ namespace MaestroApp.Maestro.Container
 
         public virtual int EstadoId { get; set; }
 
+        public virtual ICollection<ViajeContenedor> ViajeContenedor { get; set; }
 
     }
 }

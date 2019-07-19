@@ -1,3 +1,114 @@
-<p>
-  editar-viaje works!
-</p>
+<form autocomplete="off" #editViajeForm="ngForm" (ngSubmit)="save()">
+  <h1 mat-dialog-title>{{ "EditViaje" | localize }}</h1>
+  <mat-dialog-content style="width:700px;height:300px;">
+      <div class="row-fluid">
+          <div class="col-md-6">
+            <mat-form-field>
+              <input
+                matInput
+                name="Name"
+                [placeholder]="'Destino' | localize"
+                [(ngModel)]="viaje.destino"
+                required
+                minlength="2"
+                maxlength="32"
+              />
+            </mat-form-field> 
+
+            <mat-form-field class="example-full-width">
+                <input required name="fechaInicio"  [formControl]="fechaInicioView"
+                 matInput [min]="minDateInicio" [max]="maxDateInicio" 
+                [matDatepicker]="picker" placeholder="Fecha de Inicio" 
+                (dateInput)="addEventFechaInicio('input', $event)" (dateChange)="addEventFechaInicio('change', $event)"
+                >
+                <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>   
+
+              <mat-form-field>
+                  <input
+                    matInput
+                    name="Responsable"
+                    [placeholder]="'Responsable' | localize"
+                    [(ngModel)]="viaje.responsable"
+                    required
+                    minlength="2"
+                    maxlength="32"
+                  />
+                </mat-form-field> 
+                     
+          </div>
+    </div>    
+    <div class="row-fluid">
+      <div class="col-md-6">
+          <mat-form-field>
+              <mat-label>Seleccionar estado</mat-label>
+              <mat-select [(ngModel)]="viaje.estadoId" required  name="estado">                  
+                <mat-option *ngFor="let estado of estados" [value] ="estado.id" >{{estado.nombre}}</mat-option>                   
+              </mat-select>
+            </mat-form-field>      
+            <mat-form-field class="example-full-width">
+                <input required name="fechaFin"    [formControl]="fechaFinView"
+                matInput [min]="minDateFin" [max]="maxDateFin" 
+                [matDatepicker]="pickerFin" placeholder="Fecha de Fin" 
+                (dateInput)="addEventFechaFin('input', $event)" (dateChange)="addEventFechaFin('change', $event)"
+                >
+                <mat-datepicker-toggle matSuffix [for]="pickerFin" ></mat-datepicker-toggle>
+                <mat-datepicker #pickerFin></mat-datepicker>
+              </mat-form-field>     
+      </div>
+    </div>
+    <div class="row-fluid">
+        <div class="col-md-12">           
+            <div class="body table-responsive">           
+               
+                <table class="table table-hover table-striped" [busy]="isTableLoading">
+                    <thead>
+                        <tr>
+                            <th></th>                                                    
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="
+                let viaje of (viajes
+                  | paginate
+                    : {
+                        id: 'server',
+                        itemsPerPage: pageSize,
+                        currentPage: pageNumber,
+                        totalItems: totalItems
+                      })
+              ">
+                           <td>
+                             <span style="width: auto">
+                                <button type="button" mat-icon-button (click)="deleteProduct(item2.productoId)">
+                                  <mat-icon color="warn" >clear</mat-icon>
+                                </button>                                          
+                             </span>
+                            </td>                             
+                            <td>{{ viaje.responsable }}</td>         
+                          
+                        </tr>
+                    </tbody>
+                </table>               
+            </div>
+        </div>
+      </div>   
+
+  </mat-dialog-content>
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="saving" (click)="close(false)">
+      {{ "Cancel" | localize }}
+    </button>
+    <button
+      mat-flat-button
+      type="submit"
+      flex="15"
+      color="primary"
+      [disabled]="!editViajeForm.form.valid || saving"
+    >
+      {{ "Save" | localize }}
+    </button>
+  </div>
+</form>

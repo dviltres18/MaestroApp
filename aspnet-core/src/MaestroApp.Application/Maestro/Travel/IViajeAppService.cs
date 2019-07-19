@@ -17,5 +17,9 @@ namespace MaestroApp.Maestro.Travel
         Task DeleteViaje(EntityDto input);
 
         Task<GetViajeForEditOutput> GetViajeForEdit(GetViajeForEditInput input);
+
+        ListResultDto<ContenedorInViajeListDto> GetContenedorViaje(GetContenedorViajeInput input);
+
+        ListResultDto<ContenedoresDispViajeListDto> GetContenedoresDispViajes(GetContenedoresViajeInput input);
     }
 }

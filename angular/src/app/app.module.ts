@@ -46,8 +46,7 @@ import { CrearEstadoComponent } from './estado/crear-estado/crear-estado.compone
 import { EditarEstadoComponent } from './estado/editar-estado/editar-estado.component';
 import { CrearViajeComponent } from './viaje/crear-viaje/crear-viaje.component';
 import { EditarViajeComponent } from './viaje/editar-viaje/editar-viaje.component';
-//Para Rango de fechas
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -95,8 +94,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppRoutingModule,
     ServiceProxyModule,
     SharedModule,
-    NgxPaginationModule,
-    NgbModule
+    NgxPaginationModule    
   ],
   providers: [],
   entryComponents: [

@@ -4,7 +4,10 @@ import { finalize } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { AppComponentBase } from '@shared/app-component-base';
 import { ViajeServiceProxy, CrearViajeInput } from '@shared/service-proxies/service-proxies';
-import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-crear-viaje',
@@ -22,22 +25,24 @@ import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 })
 export class CrearViajeComponent  extends AppComponentBase implements OnInit {
 
-  hoveredDate: NgbDate;
-  fromDate: NgbDate;
-  toDate: NgbDate;
-
+  
   saving = false;
   viaje: CrearViajeInput = new CrearViajeInput();
+  hoy:Date = new Date();
+  minDateInicio = new Date(this.hoy.getFullYear(),this.hoy.getMonth(),this.hoy.getDate());  
+  maxDateInicio = new Date(2020, 0, 1); 
+  minDateFin = this.minDateInicio;  
+  maxDateFin = new Date(2020, 0, 1);
+ 
 
   constructor(
-    calendar: NgbCalendar,
+   
     injector: Injector,
     private viajeServiceProxy: ViajeServiceProxy,
      private _dialogRef: MatDialogRef<CrearViajeComponent>   
   ) {
     super(injector);   
-    this.fromDate = calendar.getToday();
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+    
   }
 
   ngOnInit(): void {
@@ -49,6 +54,13 @@ export class CrearViajeComponent  extends AppComponentBase implements OnInit {
     
     const viaje = new CrearViajeInput();
     viaje.init(this.viaje);
+    
+    var fechaInicio = moment(this.minDateInicio);
+    viaje.fechaInicio = fechaInicio;
+
+    var fechaFin = moment(this.minDateFin);
+    viaje.fechaFin = fechaFin;
+  
 
     this.viajeServiceProxy
       .crearViaje(viaje)
@@ -67,27 +79,14 @@ export class CrearViajeComponent  extends AppComponentBase implements OnInit {
     this._dialogRef.close(result);
   }
 
-  onDateSelection(date: NgbDate) {
-    if (!this.fromDate && !this.toDate) {
-      this.fromDate = date;
-    } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
-      this.toDate = date;
-    } else {
-      this.toDate = null;
-      this.fromDate = date;
-    }
+  addEventFechaInicio(type: string, event: MatDatepickerInputEvent<Date>) {
+    this.minDateFin = event.value;
+    this.minDateInicio = event.value;   
   }
 
-  isHovered(date: NgbDate) {
-    return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
-  }
-
-  isInside(date: NgbDate) {
-    return date.after(this.fromDate) && date.before(this.toDate);
-  }
-
-  isRange(date: NgbDate) {
-    return date.equals(this.fromDate) || date.equals(this.toDate) || this.isInside(date) || this.isHovered(date);
+  addEventFechaFin(type: string, event: MatDatepickerInputEvent<Date>) {  
+   this.minDateFin = this.minDateInicio;
+   this.maxDateInicio = event.value;
   }
 
 }

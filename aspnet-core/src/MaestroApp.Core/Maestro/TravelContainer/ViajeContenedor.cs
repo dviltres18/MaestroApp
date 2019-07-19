@@ -18,5 +18,6 @@ namespace MaestroApp.Maestro.TravelContainer
         [ForeignKey("ContenedorId")]
         public virtual Contenedor Contenedor { get; set; }
         public virtual int ContenedorId { get; set; }
+
     }
 }
