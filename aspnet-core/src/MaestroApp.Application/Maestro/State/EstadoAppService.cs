@@ -12,9 +12,9 @@ using MaestroApp.Maestro.State.Dto;
 
 namespace MaestroApp.Maestro.State
 {
-    public class EstadoAppService : MaestroAppAppServiceBase, IEstadoAppService
+    public class EstadoAppService : MaestroAppAppServiceBase
     {
-        private readonly IRepository<Estado> _estadoRepository;
+      /*  private readonly IRepository<Estado> _estadoRepository;
 
 
         public EstadoAppService(IRepository<Estado> estadoRepository)
@@ -27,8 +27,7 @@ namespace MaestroApp.Maestro.State
             var estados = _estadoRepository
                  .GetAll()
                  .Where(
-                  e => e.Nombre.Contains(input.Filter) ||
-                  e.Tipo == input.Tipo)                            
+                  e => e.Nombre.Contains(input.Filter))                            
                  .ToList();
 
             return new ListResultDto<EstadoListDto>(ObjectMapper.Map<List<EstadoListDto>>(estados));
@@ -55,12 +54,11 @@ namespace MaestroApp.Maestro.State
         public async Task EditEstado(EditEstadoInput input)
         {
             var estado = await _estadoRepository.GetAsync(input.Id);
-            estado.Nombre = input.Nombre;
-            estado.Tipo = input.Tipo;
+            estado.Nombre = input.Nombre;          
             
             await _estadoRepository.UpdateAsync(estado);
         }
-
+        */
         
     }
 }

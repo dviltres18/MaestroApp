@@ -13,13 +13,7 @@
                   minlength="2"
                   maxlength="32"
                 />
-              </mat-form-field> 
-              <mat-form-field>
-                  <mat-label>Seleccionar estado</mat-label>
-                  <mat-select [(ngModel)]="contenedor.estadoId" required  name="estado">                  
-                    <mat-option *ngFor="let estado of estados" [value] ="estado.id" >{{estado.nombre}}</mat-option>                   
-                  </mat-select>
-                </mat-form-field>                     
+              </mat-form-field>                             
             </div>
       </div>       
     </mat-dialog-content>

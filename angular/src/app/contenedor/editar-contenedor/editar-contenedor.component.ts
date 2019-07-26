@@ -8,9 +8,7 @@ import { finalize } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-  ContenedorServiceProxy,
-  EstadoServiceProxy,
-  EstadoListDto,
+  ContenedorServiceProxy,   
   GetContenedorForEditOutput ,
   EditContenedorInput   
 } from '@shared/service-proxies/service-proxies';
@@ -34,14 +32,12 @@ export class EditarContenedorComponent extends AppComponentBase implements OnIni
 
   saving = false;
   filter: string = ''; 
-  contenedor: EditContenedorInput = new EditContenedorInput(); 
-  estados: EstadoListDto[] = [];
+  contenedor: EditContenedorInput = new EditContenedorInput();   
   tipo:boolean = false;
  
   constructor(
     injector: Injector,
-    private _contenedorService: ContenedorServiceProxy,
-    private _estadoService: EstadoServiceProxy,
+    private _contenedorService: ContenedorServiceProxy,  
     private _dialogRef: MatDialogRef<EditarContenedorComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private _id: number
   ) {
@@ -53,8 +49,7 @@ export class EditarContenedorComponent extends AppComponentBase implements OnIni
       .getContenedorForEdit(this._id)
       .subscribe((result: GetContenedorForEditOutput) => {
         console.info(result);
-        this.contenedor.init(result); 
-        this.getEstados();   
+        this.contenedor.init(result);        
       });
   }
 
@@ -76,13 +71,6 @@ export class EditarContenedorComponent extends AppComponentBase implements OnIni
 
   close(result: any): void {
     this._dialogRef.close(result);
-  }
-  getEstados(): void{
-    this._estadoService.getEstados(this.filter,this.tipo).subscribe((result) => {
-      this.estados = result.items;    
-      console.info(this.estados); 
-    });  
-
-  }
+  }  
 
 }

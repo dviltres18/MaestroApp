@@ -37,7 +37,7 @@
                   <thead>
                       <tr>
                           <th>{{ "Estado" | localize }}</th>
-                          <th>{{ "Name" | localize }}</th>
+                          <th>{{ "Nombre" | localize }}</th>
                           <th>{{ "Fecha de creación" | localize }}</th>
                           <th>{{ "Cantidad de viajes" | localize }}</th>
                           <th>{{ "Actions" | localize }}</th>
@@ -59,9 +59,12 @@
                           <td>{{ contenedor.creationTime | date:'d/M/y'}}</td>
                           <td>{{ contenedor.cantidadViajes }}</td>
                           <td>
-                              <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                              <button  *ngIf=desabilitarAction(contenedor.estadoId) class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                                   <mat-icon>menu</mat-icon>
-                              </button>
+                              </button>       
+                              <button  *ngIf=!desabilitarAction(contenedor.estadoId) disabled class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                                <mat-icon>menu</mat-icon>
+                             </button>                         
                               <mat-menu #actionsMenu="matMenu">
                                   <button mat-menu-item (click)="editContenedor(contenedor)">
                                       <mat-icon>edit</mat-icon>

@@ -478,283 +478,6 @@ export class ContenedorServiceProxy {
 }
 
 @Injectable()
-export class EstadoServiceProxy {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    /**
-     * @param filter (optional) 
-     * @param tipo (optional) 
-     * @return Success
-     */
-    getEstados(filter: string | null | undefined, tipo: boolean | null | undefined): Observable<ListResultDtoOfEstadoListDto> {
-        let url_ = this.baseUrl + "/api/services/app/Estado/GetEstados?";
-        if (filter !== undefined)
-            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
-        if (tipo !== undefined)
-            url_ += "Tipo=" + encodeURIComponent("" + tipo) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetEstados(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetEstados(<any>response_);
-                } catch (e) {
-                    return <Observable<ListResultDtoOfEstadoListDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<ListResultDtoOfEstadoListDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetEstados(response: HttpResponseBase): Observable<ListResultDtoOfEstadoListDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? ListResultDtoOfEstadoListDto.fromJS(resultData200) : new ListResultDtoOfEstadoListDto();
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ListResultDtoOfEstadoListDto>(<any>null);
-    }
-
-    /**
-     * @param input (optional) 
-     * @return Success
-     */
-    crearEstado(input: CrearEstadoInput | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/Estado/CrearEstado";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(input);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCrearEstado(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processCrearEstado(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processCrearEstado(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
-    }
-
-    /**
-     * @param id (optional) 
-     * @return Success
-     */
-    deleteEstado(id: number | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/Estado/DeleteEstado?";
-        if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-            })
-        };
-
-        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processDeleteEstado(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processDeleteEstado(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processDeleteEstado(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
-    }
-
-    /**
-     * @param id (optional) 
-     * @return Success
-     */
-    getEstadoForEdit(id: number | null | undefined): Observable<GetEstadoForEditOutput> {
-        let url_ = this.baseUrl + "/api/services/app/Estado/GetEstadoForEdit?";
-        if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetEstadoForEdit(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetEstadoForEdit(<any>response_);
-                } catch (e) {
-                    return <Observable<GetEstadoForEditOutput>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<GetEstadoForEditOutput>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetEstadoForEdit(response: HttpResponseBase): Observable<GetEstadoForEditOutput> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? GetEstadoForEditOutput.fromJS(resultData200) : new GetEstadoForEditOutput();
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<GetEstadoForEditOutput>(<any>null);
-    }
-
-    /**
-     * @param input (optional) 
-     * @return Success
-     */
-    editEstado(input: EditEstadoInput | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/Estado/EditEstado";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(input);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processEditEstado(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processEditEstado(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processEditEstado(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
-    }
-}
-
-@Injectable()
 export class RoleServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -2514,6 +2237,58 @@ export class ViajeServiceProxy {
     }
 
     /**
+     * @param input (optional) 
+     * @return Success
+     */
+    cargarViaje(input: CargaViajeInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/CargarViaje";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCargarViaje(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCargarViaje(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCargarViaje(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
      * @param id (optional) 
      * @return Success
      */
@@ -2619,6 +2394,58 @@ export class ViajeServiceProxy {
             }));
         }
         return _observableOf<ListResultDtoOfContenedorInViajeListDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    iniciarViaje(input: IniciarViajeInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Viaje/IniciarViaje";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processIniciarViaje(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processIniciarViaje(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processIniciarViaje(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
     }
 
     /**
@@ -3253,285 +3080,6 @@ export interface IEditContenedorInput {
     nombre: string;
     cantidadViajes: number | undefined;
     estadoId: number;
-}
-
-export class ListResultDtoOfEstadoListDto implements IListResultDtoOfEstadoListDto {
-    items: EstadoListDto[] | undefined;
-
-    constructor(data?: IListResultDtoOfEstadoListDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            if (data["items"] && data["items"].constructor === Array) {
-                this.items = [];
-                for (let item of data["items"])
-                    this.items.push(EstadoListDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): ListResultDtoOfEstadoListDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ListResultDtoOfEstadoListDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (this.items && this.items.constructor === Array) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): ListResultDtoOfEstadoListDto {
-        const json = this.toJSON();
-        let result = new ListResultDtoOfEstadoListDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IListResultDtoOfEstadoListDto {
-    items: EstadoListDto[] | undefined;
-}
-
-export class EstadoListDto implements IEstadoListDto {
-    nombre: string | undefined;
-    tipo: boolean | undefined;
-    isDeleted: boolean | undefined;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment | undefined;
-    creatorUserId: number | undefined;
-    id: number | undefined;
-
-    constructor(data?: IEstadoListDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.nombre = data["nombre"];
-            this.tipo = data["tipo"];
-            this.isDeleted = data["isDeleted"];
-            this.deleterUserId = data["deleterUserId"];
-            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
-            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = data["lastModifierUserId"];
-            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
-            this.creatorUserId = data["creatorUserId"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): EstadoListDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new EstadoListDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["nombre"] = this.nombre;
-        data["tipo"] = this.tipo;
-        data["isDeleted"] = this.isDeleted;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["creatorUserId"] = this.creatorUserId;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone(): EstadoListDto {
-        const json = this.toJSON();
-        let result = new EstadoListDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IEstadoListDto {
-    nombre: string | undefined;
-    tipo: boolean | undefined;
-    isDeleted: boolean | undefined;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment | undefined;
-    creatorUserId: number | undefined;
-    id: number | undefined;
-}
-
-export class CrearEstadoInput implements ICrearEstadoInput {
-    nombre: string;
-    tipo: boolean;
-
-    constructor(data?: ICrearEstadoInput) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.nombre = data["nombre"];
-            this.tipo = data["tipo"];
-        }
-    }
-
-    static fromJS(data: any): CrearEstadoInput {
-        data = typeof data === 'object' ? data : {};
-        let result = new CrearEstadoInput();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["nombre"] = this.nombre;
-        data["tipo"] = this.tipo;
-        return data; 
-    }
-
-    clone(): CrearEstadoInput {
-        const json = this.toJSON();
-        let result = new CrearEstadoInput();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ICrearEstadoInput {
-    nombre: string;
-    tipo: boolean;
-}
-
-export class GetEstadoForEditOutput implements IGetEstadoForEditOutput {
-    id: number | undefined;
-    nombre: string | undefined;
-    tipo: boolean | undefined;
-
-    constructor(data?: IGetEstadoForEditOutput) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-            this.nombre = data["nombre"];
-            this.tipo = data["tipo"];
-        }
-    }
-
-    static fromJS(data: any): GetEstadoForEditOutput {
-        data = typeof data === 'object' ? data : {};
-        let result = new GetEstadoForEditOutput();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["nombre"] = this.nombre;
-        data["tipo"] = this.tipo;
-        return data; 
-    }
-
-    clone(): GetEstadoForEditOutput {
-        const json = this.toJSON();
-        let result = new GetEstadoForEditOutput();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IGetEstadoForEditOutput {
-    id: number | undefined;
-    nombre: string | undefined;
-    tipo: boolean | undefined;
-}
-
-export class EditEstadoInput implements IEditEstadoInput {
-    id: number | undefined;
-    nombre: string;
-    tipo: boolean;
-
-    constructor(data?: IEditEstadoInput) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-            this.nombre = data["nombre"];
-            this.tipo = data["tipo"];
-        }
-    }
-
-    static fromJS(data: any): EditEstadoInput {
-        data = typeof data === 'object' ? data : {};
-        let result = new EditEstadoInput();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["nombre"] = this.nombre;
-        data["tipo"] = this.tipo;
-        return data; 
-    }
-
-    clone(): EditEstadoInput {
-        const json = this.toJSON();
-        let result = new EditEstadoInput();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IEditEstadoInput {
-    id: number | undefined;
-    nombre: string;
-    tipo: boolean;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {
@@ -5506,10 +5054,6 @@ export class EditViajeInput implements IEditViajeInput {
     responsable: string;
     fechaInicio: moment.Moment;
     fechaFin: moment.Moment;
-    estadoId: number;
-    estado: EstadoInViajeListDto | undefined;
-    contenedoresSelec: AddContenedorInput[] | undefined;
-    contenedoresDisponibles: AddContenedorInput[] | undefined;
 
     constructor(data?: IEditViajeInput) {
         if (data) {
@@ -5527,18 +5071,6 @@ export class EditViajeInput implements IEditViajeInput {
             this.responsable = data["responsable"];
             this.fechaInicio = data["fechaInicio"] ? moment(data["fechaInicio"].toString()) : <any>undefined;
             this.fechaFin = data["fechaFin"] ? moment(data["fechaFin"].toString()) : <any>undefined;
-            this.estadoId = data["estadoId"];
-            this.estado = data["estado"] ? EstadoInViajeListDto.fromJS(data["estado"]) : <any>undefined;
-            if (data["contenedoresSelec"] && data["contenedoresSelec"].constructor === Array) {
-                this.contenedoresSelec = [];
-                for (let item of data["contenedoresSelec"])
-                    this.contenedoresSelec.push(AddContenedorInput.fromJS(item));
-            }
-            if (data["contenedoresDisponibles"] && data["contenedoresDisponibles"].constructor === Array) {
-                this.contenedoresDisponibles = [];
-                for (let item of data["contenedoresDisponibles"])
-                    this.contenedoresDisponibles.push(AddContenedorInput.fromJS(item));
-            }
         }
     }
 
@@ -5556,18 +5088,6 @@ export class EditViajeInput implements IEditViajeInput {
         data["responsable"] = this.responsable;
         data["fechaInicio"] = this.fechaInicio ? this.fechaInicio.toISOString() : <any>undefined;
         data["fechaFin"] = this.fechaFin ? this.fechaFin.toISOString() : <any>undefined;
-        data["estadoId"] = this.estadoId;
-        data["estado"] = this.estado ? this.estado.toJSON() : <any>undefined;
-        if (this.contenedoresSelec && this.contenedoresSelec.constructor === Array) {
-            data["contenedoresSelec"] = [];
-            for (let item of this.contenedoresSelec)
-                data["contenedoresSelec"].push(item.toJSON());
-        }
-        if (this.contenedoresDisponibles && this.contenedoresDisponibles.constructor === Array) {
-            data["contenedoresDisponibles"] = [];
-            for (let item of this.contenedoresDisponibles)
-                data["contenedoresDisponibles"].push(item.toJSON());
-        }
         return data; 
     }
 
@@ -5585,8 +5105,71 @@ export interface IEditViajeInput {
     responsable: string;
     fechaInicio: moment.Moment;
     fechaFin: moment.Moment;
-    estadoId: number;
-    estado: EstadoInViajeListDto | undefined;
+}
+
+export class CargaViajeInput implements ICargaViajeInput {
+    id: number | undefined;
+    contenedoresSelec: AddContenedorInput[] | undefined;
+    contenedoresDisponibles: AddContenedorInput[] | undefined;
+
+    constructor(data?: ICargaViajeInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            if (data["contenedoresSelec"] && data["contenedoresSelec"].constructor === Array) {
+                this.contenedoresSelec = [];
+                for (let item of data["contenedoresSelec"])
+                    this.contenedoresSelec.push(AddContenedorInput.fromJS(item));
+            }
+            if (data["contenedoresDisponibles"] && data["contenedoresDisponibles"].constructor === Array) {
+                this.contenedoresDisponibles = [];
+                for (let item of data["contenedoresDisponibles"])
+                    this.contenedoresDisponibles.push(AddContenedorInput.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CargaViajeInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new CargaViajeInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        if (this.contenedoresSelec && this.contenedoresSelec.constructor === Array) {
+            data["contenedoresSelec"] = [];
+            for (let item of this.contenedoresSelec)
+                data["contenedoresSelec"].push(item.toJSON());
+        }
+        if (this.contenedoresDisponibles && this.contenedoresDisponibles.constructor === Array) {
+            data["contenedoresDisponibles"] = [];
+            for (let item of this.contenedoresDisponibles)
+                data["contenedoresDisponibles"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): CargaViajeInput {
+        const json = this.toJSON();
+        let result = new CargaViajeInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICargaViajeInput {
+    id: number | undefined;
     contenedoresSelec: AddContenedorInput[] | undefined;
     contenedoresDisponibles: AddContenedorInput[] | undefined;
 }
@@ -5848,6 +5431,49 @@ export interface IContenedorInViajeListDto {
     contenedorId: number | undefined;
     nombre: string | undefined;
     estadoId: number | undefined;
+}
+
+export class IniciarViajeInput implements IIniciarViajeInput {
+    id: number | undefined;
+
+    constructor(data?: IIniciarViajeInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): IniciarViajeInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new IniciarViajeInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone(): IniciarViajeInput {
+        const json = this.toJSON();
+        let result = new IniciarViajeInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IIniciarViajeInput {
+    id: number | undefined;
 }
 
 export class FinalizarViajeInput implements IFinalizarViajeInput {

@@ -10,6 +10,7 @@ import { ViajeServiceProxy, ViajeListDto, EditViajeInput } from '@shared/service
 import { AppComponentBase } from '@shared/app-component-base';
 import { CrearViajeComponent } from './crear-viaje/crear-viaje.component';
 import { EditarViajeComponent } from './editar-viaje/editar-viaje.component';
+import { CargarViajeComponent } from './cargar-viaje/cargar-viaje.component';
 
 @Component({
   selector: 'app-viaje',
@@ -19,6 +20,9 @@ import { EditarViajeComponent } from './editar-viaje/editar-viaje.component';
       `
         mat-form-field {
           padding: 10px;
+        }
+        i {
+          padding: 0px 8px; 
         }
       `
   ]
@@ -40,24 +44,6 @@ export class ViajeComponent  extends AppComponentBase implements  OnInit {
     this.getViajes();
   }
 
-delete(viaje: ViajeListDto): void {
-    abp.message.confirm(
-        this.l('ViajeDeleteWarningMessage', viaje.destino),
-        (result: boolean) => {
-            if (result) {
-                this._viajeService
-                    .deleteViaje(viaje.id)
-                    .pipe(
-                        finalize(() => {
-                            abp.notify.success(this.l('SuccessfullyDeleted'));
-                            this.refresh();
-                        })
-                    )
-                    .subscribe(() => { });
-            }
-        }
-    );
-}
 
   refresh(): void {
     this.getViajes();
@@ -77,6 +63,18 @@ delete(viaje: ViajeListDto): void {
     this.showCreateOrEditViajeDialog(viaje.id);
   }
 
+  cargarViaje(viaje: ViajeListDto): void {
+
+    let cargarViajeDialog = this._dialog.open(CargarViajeComponent, {
+       data: viaje.id
+     });
+     cargarViajeDialog.afterClosed().subscribe(result => {
+       if (result) {
+           this.refresh();
+       }
+   });
+   }
+
   showCreateOrEditViajeDialog(id?: number): void {
       let createOrEditViajeDialog;
       if (id === undefined || id <= 0) {
@@ -94,13 +92,37 @@ delete(viaje: ViajeListDto): void {
       });
   }
 
-  finalizarViaje(viaje: ViajeListDto): void {
+  iniciarViaje(viaje: ViajeListDto): void {
 
     let editViajeInput:EditViajeInput = new EditViajeInput()
     editViajeInput.id= viaje.id;
 
     abp.message.confirm(
-        this.l('ViajeFinalizar', viaje.destino),
+        this.l('Iniciar Viaje a' +' '+ viaje.destino),
+        (result: boolean) => {
+            if (result) {
+                this._viajeService
+                    .iniciarViaje(editViajeInput)
+                    .pipe(
+                        finalize(() => {
+                            abp.notify.success(this.l('Successfully'));
+                            this.refresh();
+                        })
+                    )
+                    .subscribe(() => { });
+            }
+        }
+    );
+ }
+
+
+  finalizarViaje(viaje: ViajeListDto): void {
+
+    let editViajeInput:EditViajeInput = new EditViajeInput()
+    editViajeInput.id= viaje.id;
+  
+    abp.message.confirm(
+        this.l('Finalizar Viaje' +' '+ viaje.destino),
         (result: boolean) => {
             if (result) {
                 this._viajeService
@@ -115,6 +137,35 @@ delete(viaje: ViajeListDto): void {
             }
         }
     );
-}
+  }
+  desabilitarAction(estado):boolean{
+    let ok=false;
+    if(estado == 1 || estado == 2)
+      ok = true;
+    return ok;
+  }
+
+  ocultarFinalizarViaje(estado):boolean{
+    let ok=false;
+    if(estado == 2)
+      ok = true;
+    return ok;
+  }
+  ocultarIniciarViaje(estado):boolean{
+    let ok=false;
+    if(estado == 1)
+      ok = true;
+    return ok;
+  }
+  
+  ocultarCargarViaje(estado):boolean{
+    let ok=false;
+    if(estado == 1)
+      ok = true;
+    return ok;
+  }
+
+  
+  
 
 }

@@ -39,13 +39,11 @@ import { ChangePasswordComponent } from './users/change-password/change-password
 import { ResetPasswordDialogComponent } from './users/reset-password/reset-password.component';
 import { ContenedorComponent } from './contenedor/contenedor.component';
 import { ViajeComponent } from './viaje/viaje.component';
-import { EstadoComponent } from './estado/estado.component';
 import { CrearContenedorComponent } from './contenedor/crear-contenedor/crear-contenedor.component';
 import { EditarContenedorComponent } from './contenedor/editar-contenedor/editar-contenedor.component';
-import { CrearEstadoComponent } from './estado/crear-estado/crear-estado.component';
-import { EditarEstadoComponent } from './estado/editar-estado/editar-estado.component';
 import { CrearViajeComponent } from './viaje/crear-viaje/crear-viaje.component';
 import { EditarViajeComponent } from './viaje/editar-viaje/editar-viaje.component';
+import { CargarViajeComponent } from './viaje/cargar-viaje/cargar-viaje.component';
 
 
 @NgModule({
@@ -73,15 +71,15 @@ import { EditarViajeComponent } from './viaje/editar-viaje/editar-viaje.componen
     EditUserDialogComponent,
     ChangePasswordComponent,
     ResetPasswordDialogComponent,
+    // Contenedor
     ContenedorComponent,
-    ViajeComponent,
-    EstadoComponent,
     CrearContenedorComponent,
-    EditarContenedorComponent,
-    CrearEstadoComponent,
-    EditarEstadoComponent,
+    EditarContenedorComponent,   
+    // Viaje
+    ViajeComponent,     
     CrearViajeComponent,
-    EditarViajeComponent
+    EditarViajeComponent,
+    CargarViajeComponent
   ],
   imports: [
     CommonModule,

@@ -29,13 +29,6 @@ namespace MaestroApp.Maestro.Travel.Dto
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime FechaFin { get; set; }
 
-        [Required]
-        public int EstadoId { get; set; }
-
-        public EstadoInViajeListDto Estado { get; set; }
-
-        public Collection<AddContenedorInput> ContenedoresSelec { get; set; }
-
-        public Collection<AddContenedorInput> ContenedoresDisponibles { get; set; }
+                
     }
 }

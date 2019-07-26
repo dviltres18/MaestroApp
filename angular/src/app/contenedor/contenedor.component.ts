@@ -92,7 +92,14 @@ delete(contenedor: ContenedorListDto): void {
         if (result) {
             this.refresh();
         }
-    });
-}
+      });
+   }
+
+   desabilitarAction(estado):boolean{
+     let ok=false;
+     if(estado == 4)
+        ok = true;
+     return ok;
+   }
 
 }

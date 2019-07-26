@@ -11,12 +11,10 @@ import { ChangePasswordComponent } from './users/change-password/change-password
 import { ContenedorComponent } from './contenedor/contenedor.component';
 import { CrearContenedorComponent } from './contenedor/crear-contenedor/crear-contenedor.component';
 import { EditarContenedorComponent } from './contenedor/editar-contenedor/editar-contenedor.component';
-import { EstadoComponent } from './estado/estado.component';
-import { CrearEstadoComponent } from './estado/crear-estado/crear-estado.component';
-import { EditarEstadoComponent } from './estado/editar-estado/editar-estado.component';
 import { ViajeComponent } from './viaje/viaje.component';
 import { CrearViajeComponent } from './viaje/crear-viaje/crear-viaje.component';
 import { EditarViajeComponent } from './viaje/editar-viaje/editar-viaje.component';
+import { CargarViajeComponent } from './viaje/cargar-viaje/cargar-viaje.component';
 
 @NgModule({
     imports: [
@@ -32,7 +30,8 @@ import { EditarViajeComponent } from './viaje/editar-viaje/editar-viaje.componen
                     { path: 'viaje', component: ViajeComponent,
                     children: [
                         { path: '', component: CrearViajeComponent},   
-                        { path: '', component: EditarViajeComponent}                              
+                        { path: '', component: EditarViajeComponent},    
+                        { path: '', component: CargarViajeComponent}                                
                     ]
                     },                    
                     { path: 'contenedor', component: ContenedorComponent,
@@ -40,13 +39,7 @@ import { EditarViajeComponent } from './viaje/editar-viaje/editar-viaje.componen
                         { path: '', component: CrearContenedorComponent},   
                         { path: '', component: EditarContenedorComponent}                              
                     ]
-                    },
-                    { path: 'estado', component: EstadoComponent,
-                    children: [
-                        { path: '', component: CrearEstadoComponent},   
-                        { path: '', component: EditarEstadoComponent}                              
-                    ]
-                    },
+                    },                   
                     { path: 'about', component: AboutComponent },
                     { path: 'update-password', component: ChangePasswordComponent }
                 ]

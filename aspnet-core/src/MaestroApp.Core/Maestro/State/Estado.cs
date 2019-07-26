@@ -10,14 +10,14 @@ using System.Text;
 namespace MaestroApp.Maestro.State
 {
     [Table("MaestroEstado")]
-    public class Estado : FullAuditedEntity
+    public class Estado
     {
-        [Required]
-        [MaxLength(100)]
-        public virtual string Nombre { get; set; }
+        [Key]
+        public virtual int EstadoId { get; set; }
 
         [Required]
-        public virtual bool Tipo { get; set; }
+        [MaxLength(100)]
+        public virtual string Nombre { get; set; }      
 
     }
 }
