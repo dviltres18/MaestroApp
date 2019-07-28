@@ -59,19 +59,20 @@
                           <td>{{ contenedor.creationTime | date:'d/M/y'}}</td>
                           <td>{{ contenedor.cantidadViajes }}</td>
                           <td>
-                              <button  *ngIf=desabilitarAction(contenedor.estadoId) class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                              <button  class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                                   <mat-icon>menu</mat-icon>
-                              </button>       
-                              <button  *ngIf=!desabilitarAction(contenedor.estadoId) disabled class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
-                                <mat-icon>menu</mat-icon>
-                             </button>                         
+                              </button>                                                   
                               <mat-menu #actionsMenu="matMenu">
-                                  <button mat-menu-item (click)="editContenedor(contenedor)">
-                                      <mat-icon>edit</mat-icon>
-                                      <span>{{ "Edit" | localize }}</span>
+                                  <button *ngIf=ocultarEditandDeleteContenedor(contenedor.estadoId) mat-menu-item (click)="editContenedor(contenedor)">
+                                    <i class="material-icons">edit</i>
+                                    <span>{{ "Edit" | localize }}</span>
                                   </button>
-                                  <button mat-menu-item (click)="delete(contenedor)">
-                                      <mat-icon>delete</mat-icon>
+                                  <button mat-menu-item (click)="mostrarViajesContenedor(contenedor)">
+                                    <i class="material-icons">airplanemode_active</i>
+                                    <span>{{ "Detalles de los Vuelos " | localize }}</span>
+                                  </button>   
+                                  <button *ngIf=ocultarEditandDeleteContenedor(contenedor.estadoId) mat-menu-item (click)="delete(contenedor)">                                     
+                                      <i class="material-icons">delete</i>
                                       <span>{{ "Delete" | localize }}</span>
                                   </button>
                               </mat-menu>

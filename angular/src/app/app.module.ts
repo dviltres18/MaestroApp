@@ -44,6 +44,8 @@ import { EditarContenedorComponent } from './contenedor/editar-contenedor/editar
 import { CrearViajeComponent } from './viaje/crear-viaje/crear-viaje.component';
 import { EditarViajeComponent } from './viaje/editar-viaje/editar-viaje.component';
 import { CargarViajeComponent } from './viaje/cargar-viaje/cargar-viaje.component';
+import { MostrarCargaComponent } from './viaje/mostrar-carga/mostrar-carga.component';
+import { MostrarViajeComponent } from './contenedor/mostrar-viaje/mostrar-viaje.component';
 
 
 @NgModule({
@@ -79,7 +81,9 @@ import { CargarViajeComponent } from './viaje/cargar-viaje/cargar-viaje.componen
     ViajeComponent,     
     CrearViajeComponent,
     EditarViajeComponent,
-    CargarViajeComponent
+    CargarViajeComponent,
+    MostrarCargaComponent,
+    MostrarViajeComponent
   ],
   imports: [
     CommonModule,

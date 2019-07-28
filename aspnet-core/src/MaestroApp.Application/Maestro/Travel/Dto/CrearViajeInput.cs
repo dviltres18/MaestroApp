@@ -10,6 +10,10 @@ namespace MaestroApp.Maestro.Travel.Dto
     {
         [Required]
         [MaxLength(100)]
+        public string Origen { get; set; }
+
+        [Required]
+        [MaxLength(100)]
         public string Destino { get; set; }
 
         [Required]

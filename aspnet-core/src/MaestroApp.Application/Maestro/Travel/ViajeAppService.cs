@@ -39,8 +39,9 @@ namespace MaestroApp.Maestro.Travel
                  .GetAll()
                  .Include(v => v.Estado)
                  .WhereIf(!input.Filter.IsNullOrEmpty(),
-                   v => v.Destino.Contains(input.Filter))
-                 .OrderBy(v => v.Destino)
+                   v => v.Origen.Contains(input.Filter)                
+                   )
+                 .OrderBy(v => v.Origen)
                  .ToList();
 
             return new ListResultDto<ViajeListDto>(ObjectMapper.Map<List<ViajeListDto>>(viajes));
@@ -68,6 +69,7 @@ namespace MaestroApp.Maestro.Travel
         public async Task EditViaje(EditViajeInput input)
         {
             var viaje = await _viajeRepository.GetAsync(input.Id);
+            viaje.Origen = input.Origen;
             viaje.Destino = input.Destino;
             viaje.FechaInicio = input.FechaInicio;
             viaje.FechaFin = input.FechaFin;
@@ -160,7 +162,8 @@ namespace MaestroApp.Maestro.Travel
                 Nombre = c.Nombre,
                 ContenedorId = c.Id,
                 EstadoId = c.EstadoId,
-                ViajeId = input.Id
+                ViajeId = input.Id,
+                CantidadViajes = c.CantidadViajes
             }));
 
             return new ListResultDto<ContenedorInViajeListDto>(list);

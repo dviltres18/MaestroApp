@@ -1,0 +1,41 @@
+<form autocomplete="off" #mostrarCargaViajeForm="ngForm" (ngSubmit)="save()">
+  <h1 mat-dialog-title>{{ "Carga del viaje" | localize }}</h1>
+  <mat-dialog-content style="width:700px;height:300px;">       
+   
+    <div class="row-fluid">
+        <div class="col-md-12">                
+            <div class="body table-responsive">          
+              <table class="table table-hover table-striped" [busy]="isTableLoading">
+                  <thead>
+                      <tr>                 
+                          <th>{{ "Contenedor" | localize }}</th>  
+                          <th>{{ "Cantidad de viajes" | localize }}</th>  
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="
+              let contViaje of (contenedoresViaje
+                | paginate: {
+                      id: 'server',
+                      itemsPerPage: pageSize,
+                      currentPage: pageNumber,
+                      totalItems: totalItems
+                    })">
+                                                 
+                          <td>{{ contViaje.nombre }}</td>      
+                          <td>{{ contViaje.cantidadViajes }}</td>    
+                        
+                      </tr>
+                  </tbody>
+              </table>               
+            </div>         
+        </div>
+      </div>   
+
+  </mat-dialog-content>
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="saving" (click)="close(false)">
+      {{ "Cancel" | localize }}
+    </button>   
+  </div>
+</form>

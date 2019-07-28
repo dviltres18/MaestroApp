@@ -11,6 +11,7 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { CrearViajeComponent } from './crear-viaje/crear-viaje.component';
 import { EditarViajeComponent } from './editar-viaje/editar-viaje.component';
 import { CargarViajeComponent } from './cargar-viaje/cargar-viaje.component';
+import { MostrarCargaComponent } from './mostrar-carga/mostrar-carga.component';
 
 @Component({
   selector: 'app-viaje',
@@ -69,6 +70,18 @@ export class ViajeComponent  extends AppComponentBase implements  OnInit {
        data: viaje.id
      });
      cargarViajeDialog.afterClosed().subscribe(result => {
+       if (result) {
+           this.refresh();
+       }
+   });
+   }
+
+   mostrarCargaViaje(viaje: ViajeListDto): void {
+
+    let mostrarCargaViajeDialog = this._dialog.open(MostrarCargaComponent, {
+       data: viaje.id
+     });
+     mostrarCargaViajeDialog.afterClosed().subscribe(result => {
        if (result) {
            this.refresh();
        }
@@ -138,34 +151,40 @@ export class ViajeComponent  extends AppComponentBase implements  OnInit {
         }
     );
   }
-  desabilitarAction(estado):boolean{
+
+
+  ocultarEditViaje(estado:number):boolean{    
     let ok=false;
-    if(estado == 1 || estado == 2)
-      ok = true;
+    if(estado == 1)
+      ok = true;    
     return ok;
   }
-
-  ocultarFinalizarViaje(estado):boolean{
+ 
+  ocultarFinalizarViaje(estado:number):boolean{
     let ok=false;
     if(estado == 2)
       ok = true;
     return ok;
   }
-  ocultarIniciarViaje(estado):boolean{
+  ocultarIniciarViaje(estado:number):boolean{
     let ok=false;
     if(estado == 1)
       ok = true;
     return ok;
   }
   
-  ocultarCargarViaje(estado):boolean{
+  ocultarCargarViaje(estado:number):boolean{
     let ok=false;
     if(estado == 1)
-      ok = true;
+      ok = true;  
     return ok;
   }
 
-  
-  
+  ocultarContenedoresViaje(estado:number):boolean{
+    let ok=false;
+    if(estado == 2 || estado == 3)
+      ok = true;
+    return ok;
+  }
 
 }

@@ -37,6 +37,7 @@
                   <thead>
                       <tr>
                           <th>{{ "Estado" | localize }}</th>
+                          <th>{{ "Origen" | localize }}</th>    
                           <th>{{ "Destino" | localize }}</th>                       
                           <th>{{ "Fecha de inicio" | localize }}</th>   
                           <th>{{ "Fecha de fin" | localize }}</th>                          
@@ -56,30 +57,32 @@
                     })
             ">
                           <td>{{ viaje.estado.nombre }}</td>    
+                          <td>{{ viaje.origen }}</td>
                           <td>{{ viaje.destino }}</td>
                           <td>{{ viaje.fechaInicio | date:'d/M/y'}}</td>           
                           <td>{{ viaje.fechaFin | date:'d/M/y'}}</td>      
                           <td>{{ viaje.responsable }}</td>         
                           <td>
-                            <button  *ngIf=desabilitarAction(viaje.estadoId) class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                            <button  class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                                 <mat-icon>menu</mat-icon>
-                            </button>       
-                            <button  *ngIf=!desabilitarAction(viaje.estadoId) disabled class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
-                              <mat-icon>menu</mat-icon>
-                            </button>        
+                            </button>                                  
                               <mat-menu #actionsMenu="matMenu">
-                                  <button mat-menu-item (click)="editViaje(viaje)">                                
+                                  <button *ngIf=ocultarEditViaje(viaje.estadoId) mat-menu-item (click)="editViaje(viaje)">                                
                                         <i class="material-icons">edit</i>
                                         <span>{{ "Edit" | localize }}</span>
                                   </button>  
-                                  <button *ngIf=ocultarCargarViaje(viaje.estadoId) mat-menu-item (click)="cargarViaje(viaje)">
+                                  <button *ngIf="ocultarCargarViaje(viaje.estadoId)"  mat-menu-item (click)="cargarViaje(viaje)">
                                     <i class="material-icons">add_shopping_cart</i>
                                     <span>{{ "Cargar viaje" | localize }}</span>
                                   </button>         
                                   <button *ngIf=ocultarIniciarViaje(viaje.estadoId) mat-menu-item (click)="iniciarViaje(viaje)">
                                     <i class="material-icons">flight_takeoff</i>
                                     <span>{{ "Iniciar viaje" | localize }}</span>
-                                  </button>                                
+                                  </button>    
+                                  <button *ngIf=ocultarContenedoresViaje(viaje.estadoId) mat-menu-item (click)="mostrarCargaViaje(viaje)">
+                                    <i class="material-icons">visibility</i>
+                                    <span>{{ "Carga del vuelo " | localize }}</span>
+                                  </button>                              
                                   <button *ngIf=ocultarFinalizarViaje(viaje.estadoId) mat-menu-item (click)="finalizarViaje(viaje)">
                                         <i class="material-icons">flight_land</i>
                                     <span>{{ "Finalizar viaje" | localize }}</span>

@@ -4,6 +4,7 @@ using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using MaestroApp.Maestro.Container.Dto;
+using MaestroApp.Maestro.TravelContainer;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,19 @@ using System.Threading.Tasks;
 
 namespace MaestroApp.Maestro.Container
 {
-    public class ContenedorAppService : MaestroAppAppServiceBase, IContenedorAppService
+    public class ContenedorAppService : MaestroAppAppServiceBase,IContenedorAppService
     {
         private readonly IRepository<Contenedor> _contenedorRepository;
+        private readonly IRepository<ViajeContenedor> _viajeContenedorRepository;
 
 
-        public ContenedorAppService(IRepository<Contenedor> contenedorRepository)
+        public ContenedorAppService(
+            IRepository<Contenedor> contenedorRepository,
+            IRepository<ViajeContenedor> viajeContenedorRepository
+         )
         {
             _contenedorRepository = contenedorRepository;
+            _viajeContenedorRepository = viajeContenedorRepository;
         }
 
 
@@ -67,5 +73,19 @@ namespace MaestroApp.Maestro.Container
 
             await _contenedorRepository.UpdateAsync(contenedor);
         }
+
+        public ListResultDto<ViajeContenedorListDto> GetViajesContenedores(GetViajeContenedorInput input)
+        {
+            var viajes = _viajeContenedorRepository
+               .GetAll()             
+               .Include(vc => vc.Viaje)
+               .Include(vc => vc.Viaje.Estado)
+               .Where(vc => vc.ContenedorId == input.Id)
+               .ToList();
+
+            return new ListResultDto<ViajeContenedorListDto>(ObjectMapper.Map<List<ViajeContenedorListDto>>(viajes));
+        }
+
+        
     }
 }

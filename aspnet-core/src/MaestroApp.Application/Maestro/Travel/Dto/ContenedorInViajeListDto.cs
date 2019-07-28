@@ -13,5 +13,7 @@ namespace MaestroApp.Maestro.Travel.Dto
         public string Nombre { get; set; }
 
         public int EstadoId { get; set; }
+
+        public int CantidadViajes { get; set; }
     }
 }

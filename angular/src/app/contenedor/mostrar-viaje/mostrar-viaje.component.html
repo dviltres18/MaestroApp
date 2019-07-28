@@ -1,0 +1,48 @@
+<form autocomplete="off" #mostrarViajesContenedorForm="ngForm" (ngSubmit)="save()">
+  <h1 mat-dialog-title>{{ "Viajes del Contenedor" | localize }}</h1>
+  <mat-dialog-content style="width:700px;height:300px;">       
+   
+    <div class="row-fluid">
+        <div class="col-md-12">                
+            <div class="body table-responsive">          
+              <table class="table table-hover table-striped" [busy]="isTableLoading">
+                  <thead>
+                      <tr>      
+                          <th>{{ "Estado" | localize }}</th> 
+                          <th>{{ "Origen" | localize }}</th>    
+                          <th>{{ "Destino" | localize }}</th>                       
+                          <th>{{ "Fecha de inicio" | localize }}</th>   
+                          <th>{{ "Fecha de fin" | localize }}</th>                          
+                          <th>{{ "Responsable" | localize }}</th>                
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="
+              let viajesContenedor of (viajesContenedores
+                | paginate: {
+                      id: 'server',
+                      itemsPerPage: pageSize,
+                      currentPage: pageNumber,
+                      totalItems: totalItems
+                    })">
+                    <td>{{ viajesContenedor.viaje.estado.nombre }}</td>                              
+                    <td>{{ viajesContenedor.viaje.origen }}</td>           
+                    <td>{{ viajesContenedor.viaje.destino }}</td>
+                    <td>{{ viajesContenedor.viaje.fechaInicio | date:'d/M/y'}}</td>           
+                    <td>{{ viajesContenedor.viaje.fechaFin | date:'d/M/y'}}</td>      
+                    <td>{{ viajesContenedor.viaje.responsable }}</td>      
+                        
+                      </tr>
+                  </tbody>
+              </table>               
+            </div>         
+        </div>
+      </div>   
+
+  </mat-dialog-content>
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="saving" (click)="close(false)">
+      {{ "Cancel" | localize }}
+    </button>   
+  </div>
+</form>

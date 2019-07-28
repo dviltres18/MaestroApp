@@ -10,18 +10,22 @@ import { ContenedorServiceProxy, ContenedorListDto } from '@shared/service-proxi
 import { AppComponentBase } from '@shared/app-component-base';
 import { CrearContenedorComponent } from './crear-contenedor/crear-contenedor.component';
 import { EditarContenedorComponent } from './editar-contenedor/editar-contenedor.component';
+import { MostrarViajeComponent } from './mostrar-viaje/mostrar-viaje.component';
 
 
 @Component({
   templateUrl: './contenedor.component.html',
   animations: [appModuleAnimation()],
   styles: [
-      `
-        mat-form-field {
-          padding: 10px;
-        }
-      `
-  ]
+    `
+      mat-form-field {
+        padding: 10px;
+      }
+      i {
+        padding: 0px 8px; 
+      }
+    `
+]
 })
 export class ContenedorComponent extends AppComponentBase implements  OnInit
 {
@@ -78,6 +82,18 @@ delete(contenedor: ContenedorListDto): void {
     this.showCreateOrEditContenedorDialog(contenedor.id);
   }
 
+  mostrarViajesContenedor(contenedor: ContenedorListDto): void {
+
+    let mostrarViajesContenedorDialog = this._dialog.open(MostrarViajeComponent, {
+       data: contenedor.id
+     });
+     mostrarViajesContenedorDialog.afterClosed().subscribe(result => {
+       if (result) {
+           this.refresh();
+       }
+   });
+   }
+
   showCreateOrEditContenedorDialog(id?: number): void {
     let createOrEditContenedorDialog;
     if (id === undefined || id <= 0) {
@@ -95,11 +111,12 @@ delete(contenedor: ContenedorListDto): void {
       });
    }
 
-   desabilitarAction(estado):boolean{
-     let ok=false;
-     if(estado == 4)
-        ok = true;
-     return ok;
-   }
+   ocultarEditandDeleteContenedor(estado:number):boolean{    
+    let ok=false;
+    if(estado == 4 )
+      ok = true;    
+    return ok;
+  }
+ 
 
 }

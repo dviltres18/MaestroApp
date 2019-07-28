@@ -18,5 +18,7 @@ namespace MaestroApp.Maestro.Container
         Task DeleteContenedor(EntityDto input);
 
         Task<GetContenedorForEditOutput> GetContenedorForEdit(GetContenedorForEditInput input);
+
+        ListResultDto<ViajeContenedorListDto> GetViajesContenedores(GetViajeContenedorInput input);
     }
 }

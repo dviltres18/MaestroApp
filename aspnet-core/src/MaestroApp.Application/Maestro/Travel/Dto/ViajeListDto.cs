@@ -10,7 +10,8 @@ namespace MaestroApp.Maestro.Travel.Dto
 {
     public class ViajeListDto : FullAuditedEntityDto
     {
-        
+        public string Origen { get; set; }
+
         public  string Destino { get; set; }
        
         public  string Responsable { get; set; }

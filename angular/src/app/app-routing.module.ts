@@ -15,6 +15,8 @@ import { ViajeComponent } from './viaje/viaje.component';
 import { CrearViajeComponent } from './viaje/crear-viaje/crear-viaje.component';
 import { EditarViajeComponent } from './viaje/editar-viaje/editar-viaje.component';
 import { CargarViajeComponent } from './viaje/cargar-viaje/cargar-viaje.component';
+import { MostrarCargaComponent } from './viaje/mostrar-carga/mostrar-carga.component';
+import { MostrarViajeComponent } from './contenedor/mostrar-viaje/mostrar-viaje.component';
 
 @NgModule({
     imports: [
@@ -31,13 +33,15 @@ import { CargarViajeComponent } from './viaje/cargar-viaje/cargar-viaje.componen
                     children: [
                         { path: '', component: CrearViajeComponent},   
                         { path: '', component: EditarViajeComponent},    
-                        { path: '', component: CargarViajeComponent}                                
+                        { path: '', component: CargarViajeComponent},
+                        { path: '', component: MostrarCargaComponent}                                       
                     ]
                     },                    
                     { path: 'contenedor', component: ContenedorComponent,
                     children: [
                         { path: '', component: CrearContenedorComponent},   
-                        { path: '', component: EditarContenedorComponent}                              
+                        { path: '', component: EditarContenedorComponent},
+                        { path: '', component: MostrarViajeComponent}                             
                     ]
                     },                   
                     { path: 'about', component: AboutComponent },

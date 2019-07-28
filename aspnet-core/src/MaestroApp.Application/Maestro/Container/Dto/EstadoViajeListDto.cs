@@ -4,8 +4,8 @@ using System.Text;
 
 namespace MaestroApp.Maestro.Container.Dto
 {
-    public class ContenedorInViajeListDto
+    public class EstadoViajeListDto
     {
-        public int Id { get; set; }
+        public string Nombre { get; set; }
     }
 }

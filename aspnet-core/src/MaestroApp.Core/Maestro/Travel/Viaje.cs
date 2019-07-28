@@ -13,6 +13,11 @@ namespace MaestroApp.Maestro.Travel
     [Table("MaestroViaje")]
     public class Viaje : FullAuditedEntity
     {
+
+        [Required]
+        [MaxLength(100)]
+        public virtual string Origen { get; set; }
+
         [Required]
         [MaxLength(100)]
         public virtual string Destino { get; set; }
