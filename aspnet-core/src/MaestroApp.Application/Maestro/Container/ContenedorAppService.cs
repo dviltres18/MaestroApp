@@ -1,8 +1,10 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
+using MaestroApp.Authorization;
 using MaestroApp.Maestro.Container.Dto;
 using MaestroApp.Maestro.TravelContainer;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +16,8 @@ using System.Threading.Tasks;
 
 namespace MaestroApp.Maestro.Container
 {
+    // Para poner permisos a una clase entera
+    [AbpAuthorize(PermissionNames.Pages_Contenedor)]
     public class ContenedorAppService : MaestroAppAppServiceBase,IContenedorAppService
     {
         private readonly IRepository<Contenedor> _contenedorRepository;

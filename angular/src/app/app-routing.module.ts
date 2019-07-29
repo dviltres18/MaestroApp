@@ -29,7 +29,7 @@ import { MostrarViajeComponent } from './contenedor/mostrar-viaje/mostrar-viaje.
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
-                    { path: 'viaje', component: ViajeComponent,
+                    { path: 'viaje', component: ViajeComponent, data: { permission: 'Pages.Viajes' } , canActivate: [AppRouteGuard],
                     children: [
                         { path: '', component: CrearViajeComponent},   
                         { path: '', component: EditarViajeComponent},    
@@ -37,7 +37,7 @@ import { MostrarViajeComponent } from './contenedor/mostrar-viaje/mostrar-viaje.
                         { path: '', component: MostrarCargaComponent}                                       
                     ]
                     },                    
-                    { path: 'contenedor', component: ContenedorComponent,
+                    { path: 'contenedor', component: ContenedorComponent, data: { permission: 'Pages.Contenedores' } , canActivate: [AppRouteGuard],
                     children: [
                         { path: '', component: CrearContenedorComponent},   
                         { path: '', component: EditarContenedorComponent},

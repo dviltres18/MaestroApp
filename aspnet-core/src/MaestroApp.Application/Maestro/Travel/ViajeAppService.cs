@@ -1,8 +1,10 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
+using MaestroApp.Authorization;
 using MaestroApp.Maestro.Container;
 using MaestroApp.Maestro.Travel.Dto;
 using MaestroApp.Maestro.TravelContainer;
@@ -15,6 +17,8 @@ using System.Threading.Tasks;
 
 namespace MaestroApp.Maestro.Travel
 {
+    // Para poner permisos a una clase entera
+    [AbpAuthorize(PermissionNames.Pages_Viaje)]
     public class ViajeAppService : MaestroAppAppServiceBase, IViajeAppService
     {
         private readonly IRepository<Viaje> _viajeRepository;
@@ -39,9 +43,12 @@ namespace MaestroApp.Maestro.Travel
                  .GetAll()
                  .Include(v => v.Estado)
                  .WhereIf(!input.Filter.IsNullOrEmpty(),
-                   v => v.Origen.Contains(input.Filter)                
+                   v => v.Origen.Contains(input.Filter)||
+                   v.Destino.Contains(input.Filter) ||
+                   v.Responsable.Contains(input.Filter)
                    )
-                 .OrderBy(v => v.Origen)
+                 .OrderBy(v => v.Estado)
+                 .ThenBy(v => v.Origen)
                  .ToList();
 
             return new ListResultDto<ViajeListDto>(ObjectMapper.Map<List<ViajeListDto>>(viajes));
